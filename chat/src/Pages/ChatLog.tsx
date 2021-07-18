@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../App.css';
 import MessageBox from '../MessageBox';
 import {useLocation,useHistory} from "react-router-dom"
+import Message from '../Message';
 
 function ChatLog() {
-    const [messages, setMessages] = useState<string[]>([])
+    const [messages, setMessages] = useState<Message[]>([])
     const input = useRef("")
     const location=useLocation<{Username:string}>()
     let navigate=useHistory();
@@ -21,7 +22,7 @@ function ChatLog() {
 
     const sendClick = (e: any) => {
         e.preventDefault()
-        setMessages(arr => [...arr, location.state.Username+": "+input.current])
+        setMessages(arr => [...arr,new Message(location.state.Username,input.current)])
         let component=document.getElementById('MessageInput')
         if(component && component instanceof HTMLInputElement)
             component.value=""

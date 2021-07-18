@@ -34,7 +34,7 @@ function ChatLog() {
         e.preventDefault()
         let user=location.state.Username
         let message=input.current
-        //setMessages(arr => [...arr,new Message(location.state.Username,input.current)])
+        setMessages(arr => [...arr,new Message(location.state.Username,input.current)])
         let component=document.getElementById('MessageInput')
         if(component && component instanceof HTMLInputElement)
             component.value=""

@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { io } from "socket.io-client";
 import Message from './Message';
 
 interface MessageProps {

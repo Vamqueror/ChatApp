@@ -3,6 +3,9 @@ import '../App.css';
 import MessageBox from '../MessageBox';
 import {useLocation,useHistory} from "react-router-dom"
 import Message from '../Message';
+import { io } from "socket.io-client";
+
+const socket= io('http://localhost:4001/')
 
 function ChatLog() {
     const [messages, setMessages] = useState<Message[]>([])
@@ -20,12 +23,22 @@ function ChatLog() {
          navigate.push('/Login')
     },[])
 
+    useEffect(()=>{
+        socket.on('message',(msg:any)=>{
+            console.log(msg)
+            setMessages(arr=>[...arr,new Message(msg.user,msg.message)]) 
+        })
+    },[])
+
     const sendClick = (e: any) => {
         e.preventDefault()
-        setMessages(arr => [...arr,new Message(location.state.Username,input.current)])
+        let user=location.state.Username
+        let message=input.current
+        //setMessages(arr => [...arr,new Message(location.state.Username,input.current)])
         let component=document.getElementById('MessageInput')
         if(component && component instanceof HTMLInputElement)
             component.value=""
+        socket.emit('message',{user,message})
     }
 
     const disconnectClick=(e:any)=>{
@@ -39,7 +52,7 @@ function ChatLog() {
             <MessageBox messageArray={messages} /><br />
             <form>
                 <input  id="MessageInput" type="text" placeholder="Type a message" onChange={handleChange}></input>
-                <button type="reset"onClick={(e) => sendClick(e)}>Send</button>
+                <button onClick={(e) => sendClick(e)}>Send</button>
             </form>
             <button onClick={disconnectClick}>Disconnect</button>
         </div>

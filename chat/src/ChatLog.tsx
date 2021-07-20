@@ -5,16 +5,19 @@ import Message from './Message';
 import { io } from "socket.io-client";
 import { FC } from "react";
 import { Button, Form } from 'react-bootstrap';
+import Group from './Group';
 
 const socket = io('http://localhost:4001/')
 
 
 interface user {
     username: string
+    currentGroup:Group
+    sendMessage:any
 }
 
 const ChatLog: FC<user> = (props) => {
-    const [messages, setMessages] = useState<Message[]>([])
+    //const [messages, setMessages] = useState<Message[]>(props.currentGroup.msgLog)
     const input = useRef("")
 
 
@@ -32,17 +35,18 @@ const ChatLog: FC<user> = (props) => {
     }
 
 
-    useEffect(() => {
+  /*   useEffect(() => {
         socket.on('message', (msg: any) => {
             setMessages(arr => [...arr, new Message(msg.user, msg.messageText)])
         })
-    }, [])
+    }, []) */
 
     const sendClick = (e: any) => {
         e.preventDefault()
         let user = props.username, messageText = input.current
-        setMessages(arr => [...arr, new Message(user, messageText)])
-        socket.emit('message', { user, messageText })
+       // setMessages(arr => [...arr, new Message(user, messageText)])
+       props.sendMessage(new Message(user,messageText))
+        //socket.emit('message', { user, messageText })
         resetInput()
     }
 
@@ -50,7 +54,7 @@ const ChatLog: FC<user> = (props) => {
 
     return (
         <div>
-            <MessageBox messageArray={messages} /><br />
+            <MessageBox messageArray={props.currentGroup.msgLog} /><br />
             <Form>
                 <Form.Group >
                     <Form.Control  id="MessageInput" type="text" placeholder="Type a message" onChange={handleChange}></Form.Control>

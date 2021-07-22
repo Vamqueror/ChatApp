@@ -8,16 +8,16 @@ import { Button, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Group from './Group';
 
 
-interface myConvers {
+interface groupManager {
     groups: Group[]
     setCurrentGroup: any
 }
 
-const Conversations: FC<myConvers> = (props) => {
+const GroupList: FC<groupManager> = (props) => {
 
     const renderGroups = (): JSX.Element[] => {
         return props.groups.map((element,index) => {
-            return <ListGroupItem key={index} eventKey={element.id}>{element.name}</ListGroupItem>
+            return <ListGroupItem action key={index} eventKey={element.id}>{element.name}</ListGroupItem>
         })
     }
 
@@ -26,4 +26,4 @@ const Conversations: FC<myConvers> = (props) => {
     </ListGroup>
 }
 
-export default Conversations
+export default GroupList

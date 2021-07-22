@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../App.css';
+import { Button, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
+
 
 
 function Login() {
@@ -18,10 +20,10 @@ function Login() {
     }
 
 
-    return <div>
+    return <div className="login">
         <form>
-            <input type="text" onChange={handleChange} placeholder="Enter Username"></input><br />
-            <button onClick={buttonClick}>Login</button>
+            <input type="text" onChange={handleChange} placeholder="Enter Username"></input> <br /><br />
+            <Button onClick={buttonClick}>Login</Button>
         </form>
     </div>
 }

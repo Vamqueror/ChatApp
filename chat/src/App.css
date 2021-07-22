@@ -2,6 +2,47 @@
   text-align: center;
 }
 
+
+html{
+  background: url("./styleImages/html.png");
+  background-size: cover;
+}
+.chatApp{
+  background-image: url("./styleImages/chatContainer.jpg");
+  background-size: cover;
+  display: flex;
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 55%;
+  margin-top: -50px;
+  margin-left: -100px;
+  transform: translate(-50%,-50%);
+  padding: 20px;
+}
+.login{
+  background-image: url("./styleImages/chatContainer.jpg");
+  background-size: cover;
+  display: flex;
+  position: fixed;
+  width: 30;
+  height: 20;
+  top: 50%;
+  text-align: center;
+  left: 55%;
+  margin-top: -50px;
+  margin-left: -100px;
+  transform: translate(-50%,-50%);
+  padding: 20px;
+  font-size:24px;
+  border-radius: 10%;
+}
+/* 
+.chatContainer{
+  border
+}
+ */
 .App-logo {
   height: 40vmin;
   pointer-events: none;

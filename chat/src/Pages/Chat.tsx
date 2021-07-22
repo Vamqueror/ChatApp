@@ -4,10 +4,12 @@ import ChatLog from '../ChatLog';
 import { useLocation, useHistory } from "react-router-dom"
 import { io } from "socket.io-client";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
+import { Button,Modal } from 'react-bootstrap';
 import Group from '../Group';
-import Conversations from '../Conversations';
+import GroupList from '../GroupList';
 import Message from '../Message';
+import NewGroup from '../NewGroup';
+
 
 //const allRooms=[{id:44, name: "the boys"},{id:22, name: "papapos"},{id:55, name: "sad face"}]
 const allGroups=[new Group (44,"the boys"),new Group(22, "papapos"),new Group(55,"sad face")]
@@ -15,10 +17,14 @@ const allGroups=[new Group (44,"the boys"),new Group(22, "papapos"),new Group(55
 const Chat = () => {
     
     const [currentGroup,setCurrentGroup]=useState(allGroups[0])
+    const [newGroupModal,setGroupModal]=useState(false)
     const location = useLocation<{ Username: string }>()
     const [myGroups,setGroups]=useState(allGroups)
     let navigate = useHistory();
 
+    const closeModal=()=>{
+        setGroupModal(false)
+    }
     /* const handleRoomChange=(obj:{id :number,name:string})=>{
         setRoom(obj)
     } */
@@ -59,10 +65,17 @@ const Chat = () => {
         console.log(currentGroup)
     })
     return <div>
-        <Conversations groups={allGroups} setCurrentGroup={handleGroupChange}/>
+        <Button  variant="danger" onClick={disconnectClick}>Disconnect</Button>
+        <div className="chatApp">
+        <GroupList groups={allGroups} setCurrentGroup={handleGroupChange}/>
         <ChatLog sendMessage={updateGroupLog} currentGroup={currentGroup} username={location.state?location.state.Username:""}/><br/>
-        <Button className="middle" variant="danger" onClick={disconnectClick}>Disconnect</Button>
-    </div>
+        <Button onClick={()=>setGroupModal(true)}>Create New Group</Button>
+        </div>
+        <Modal show={newGroupModal} onHide={closeModal}>
+        <NewGroup closeModal={closeModal}/>
+        </Modal>
+        </div>
+    
 }
 
 

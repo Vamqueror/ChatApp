@@ -26,6 +26,7 @@ const NewGroup:FC<ModalCloser>=(props)=>{
             <Form.Label>Name</Form.Label>
             <Form.Control type="text" ref={membersRef} required />
           </Form.Group>
+          <br/>
           <Button type="submit">Create</Button>
         </Form>
       </Modal.Body>

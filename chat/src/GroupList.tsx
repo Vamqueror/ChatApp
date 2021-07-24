@@ -6,22 +6,19 @@ import { io } from "socket.io-client";
 import { FC } from "react";
 import { Button, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Group from './Group';
+import {useGroup,useCurrentGroupUpdate} from './Context/GroupProvider'
 
+const GroupList = () => {
 
-interface groupManager {
-    groups: Group[]
-    setCurrentGroup: any
-}
-
-const GroupList: FC<groupManager> = (props) => {
-
+    const groups=useGroup()
+    const setCurrentGroup=useCurrentGroupUpdate()
     const renderGroups = (): JSX.Element[] => {
-        return props.groups.map((element,index) => {
+        return groups.map((element,index) => {
             return <ListGroupItem action key={index} eventKey={element.id}>{element.name}</ListGroupItem>
         })
     }
 
-    return <ListGroup onSelect={(selectedKey) =>props.setCurrentGroup(selectedKey)}>
+    return <ListGroup onSelect={(selectedKey) =>setCurrentGroup(selectedKey)}>
         {renderGroups()}
     </ListGroup>
 }

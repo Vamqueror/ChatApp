@@ -6,19 +6,19 @@ import { io } from "socket.io-client";
 import { FC } from "react";
 import { Button, Form } from 'react-bootstrap';
 import Group from './Group';
+import { useCurrentGroup, useSendMessage } from './Context/GroupProvider';
 
 const socket = io('http://localhost:4001/')
 
 
 interface user {
     username: string
-    currentGroup:Group
-    sendMessage:any
 }
 
 const ChatLog: FC<user> = (props) => {
-    //const [messages, setMessages] = useState<Message[]>(props.currentGroup.msgLog)
     const input = useRef("")
+    const sendMessage=useSendMessage()
+    const currentGroup=useCurrentGroup()
 
 
 
@@ -45,7 +45,7 @@ const ChatLog: FC<user> = (props) => {
         e.preventDefault()
         let user = props.username, messageText = input.current
        // setMessages(arr => [...arr, new Message(user, messageText)])
-       props.sendMessage(new Message(user,messageText))
+        sendMessage(new Message(user,messageText))
         //socket.emit('message', { user, messageText })
         resetInput()
     }
@@ -54,7 +54,7 @@ const ChatLog: FC<user> = (props) => {
 
     return (
         <div>
-            <MessageBox messageArray={props.currentGroup.msgLog} /><br />
+            <MessageBox messageArray={currentGroup===null?[]:currentGroup.msgLog} /><br />
             <Form>
                 <Form.Group >
                     <Form.Control  id="MessageInput" type="text" placeholder="Type a message" onChange={handleChange}></Form.Control>

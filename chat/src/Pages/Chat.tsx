@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import ChatLog from '../ChatLog';
 import { useLocation, useHistory } from "react-router-dom"
-import { io } from "socket.io-client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button,Modal } from 'react-bootstrap';
-import Group from '../Group';
 import GroupList from '../GroupList';
-import Message from '../Message';
 import NewGroup from '../NewGroup';
 import { GroupProvider } from '../Context/GroupProvider';
 

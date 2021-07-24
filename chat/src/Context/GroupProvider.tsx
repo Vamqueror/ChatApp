@@ -1,8 +1,10 @@
+import { group } from "console";
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import { splitMembersString} from "../generalFunctions";
 import Group from "../Group";
 import Message from "../Message";
 
-const allGroups = [new Group(44, "the boys"), new Group(22, "papapos"), new Group(55, "sad face")]
+const allGroups = [new Group(44, "the boys",[]), new Group(22, "papapos",[]), new Group(55, "sad face",[])]
 
 const GroupContext = createContext<Group[]>([])
 const CurrentGroupContext = createContext<Group | null>(null)
@@ -30,12 +32,14 @@ export function useAddGroup(){
     return useContext(AddGroupContext)
 }
 
-
+let id=0
 export const GroupProvider: FC<{ children: any }> = (props) => {
     const [myGroups, setGroups] = useState<Group[]>(allGroups)
     const [currentGroup, setCurrentGroup] = useState<Group | null>(null)
 
-    const addGroup=(group:Group)=>{
+    const addGroup=(name:string,members:string)=>{
+        let group=new Group(id++,name,splitMembersString(members))
+        console.log(group)
         setGroups(obj=>[...obj,group])
     }
     const handleGroupChange = (id: number) => {

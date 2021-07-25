@@ -5,8 +5,8 @@ import { useLocation, useHistory } from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button,Modal } from 'react-bootstrap';
 import GroupList from '../GroupList';
-import NewGroup from '../NewGroup';
 import { GroupProvider } from '../Context/GroupProvider';
+import NewGroupModal from '../NewGroup';
 
 
 const Chat = () => {
@@ -31,7 +31,6 @@ const Chat = () => {
             navigate.push('/Login')
     }, [])
 
-    
     return <GroupProvider>
         <div>
         <Button  variant="danger" onClick={disconnectClick}>Disconnect</Button>
@@ -41,11 +40,10 @@ const Chat = () => {
         <Button onClick={()=>setGroupModal(true)}>Create New Group</Button>
         </div>
         <Modal show={newGroupModal} onHide={closeModal}>
-        <NewGroup closeModal={closeModal}/>
+        <NewGroupModal closeModal={closeModal}/>
         </Modal>
         </div>
         </GroupProvider>
-    
 }
 
 

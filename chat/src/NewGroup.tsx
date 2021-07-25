@@ -1,11 +1,11 @@
-import { ChangeEvent, FC, useRef } from 'react';
+import {  FC, useRef } from 'react';
 import { Modal, Form,Button} from 'react-bootstrap';
 import { useAddGroup } from './Context/GroupProvider';
 
 interface ModalCloser{
   closeModal:any
 }
-const NewGroup:FC<ModalCloser>=(props)=>{
+const NewGroupModal:FC<ModalCloser>=(props)=>{
 
     const nameRef=useRef("");
     const membersRef=useRef("");
@@ -47,4 +47,4 @@ const NewGroup:FC<ModalCloser>=(props)=>{
 }
 
 
-export default NewGroup
+export default NewGroupModal

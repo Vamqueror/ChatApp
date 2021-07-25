@@ -1,4 +1,3 @@
-import { group } from "console";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import { splitMembersString} from "../generalFunctions";
 import Group from "../Group";

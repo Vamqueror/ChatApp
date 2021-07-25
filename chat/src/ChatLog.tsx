@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import {useRef} from 'react';
 import './App.css';
 import MessageBox from './MessageBox';
 import Message from './Message';
 import { io } from "socket.io-client";
 import { FC } from "react";
 import { Button, Form } from 'react-bootstrap';
-import Group from './Group';
 import { useCurrentGroup, useSendMessage } from './Context/GroupProvider';
 
 const socket = io('http://localhost:4001/')

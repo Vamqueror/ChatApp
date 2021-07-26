@@ -4,6 +4,7 @@ import { useAddGroup } from './Context/GroupProvider';
 
 interface ModalCloser{
   closeModal:any
+  username:string
 }
 const NewGroupModal:FC<ModalCloser>=(props)=>{
 
@@ -24,7 +25,8 @@ const NewGroupModal:FC<ModalCloser>=(props)=>{
 }
      const createGroupBtn=(e:any)=>{
       e.preventDefault()
-      addGroup(nameRef.current,membersRef.current)
+      addGroup(nameRef.current,membersRef.current+','+props.username)
+      props.closeModal()
     } 
 
     return  <>

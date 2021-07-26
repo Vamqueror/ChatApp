@@ -1,6 +1,7 @@
 import './App.css';
 import {  ListGroup, ListGroupItem } from 'react-bootstrap';
 import {useGroup,useCurrentGroupUpdate} from './Context/GroupProvider'
+import { useEffect } from 'react';
 
 const GroupList = () => {
 
@@ -13,6 +14,10 @@ const GroupList = () => {
         })
     }
 
+    useEffect(()=>{
+        console.log(groups)
+    })
+    
     return <ListGroup onSelect={(selectedKey) =>setCurrentGroup(selectedKey)}>
         {renderGroups()}
     </ListGroup>

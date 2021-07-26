@@ -7,6 +7,7 @@ import { Button,Modal } from 'react-bootstrap';
 import GroupList from '../GroupList';
 import { GroupProvider } from '../Context/GroupProvider';
 import NewGroupModal from '../NewGroup';
+import { ChatSocketProvider } from '../Context/ChatSocketProvider';
 
 
 const Chat = () => {
@@ -14,6 +15,9 @@ const Chat = () => {
     const [newGroupModal,setGroupModal]=useState(false)
     const location = useLocation<{ Username: string }>()
     let navigate = useHistory();
+
+    if (location.state == undefined || location.state.Username === '')
+        navigate.push('/Login')
 
     const closeModal=()=>{
         setGroupModal(false)
@@ -26,12 +30,13 @@ const Chat = () => {
         navigate.push('/Login')
     }
 
-    useEffect(() => {
+   /*  useEffect(() => {
         if (location.state == undefined || location.state.Username === '')
             navigate.push('/Login')
-    }, [])
+    }, []) */
 
-    return <GroupProvider>
+    return <ChatSocketProvider username={location.state.Username}>
+    <GroupProvider>
         <div>
         <Button  variant="danger" onClick={disconnectClick}>Disconnect</Button>
         <div className="chatApp">
@@ -40,10 +45,11 @@ const Chat = () => {
         <Button onClick={()=>setGroupModal(true)}>Create New Group</Button>
         </div>
         <Modal show={newGroupModal} onHide={closeModal}>
-        <NewGroupModal closeModal={closeModal}/>
+        <NewGroupModal username={location.state.Username} closeModal={closeModal}/>
         </Modal>
         </div>
         </GroupProvider>
+    </ChatSocketProvider>
 }
 
 

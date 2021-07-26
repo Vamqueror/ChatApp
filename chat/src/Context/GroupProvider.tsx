@@ -1,9 +1,9 @@
+
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import { splitMembersString} from "../generalFunctions";
 import Group from "../Group";
 import Message from "../Message";
-
-const allGroups = [new Group(44, "the boys",[]), new Group(22, "papapos",[]), new Group(55, "sad face",[])]
+import { useChatSocket } from "./ChatSocketProvider";
 
 const GroupContext = createContext<Group[]>([])
 const CurrentGroupContext = createContext<Group | null>(null)
@@ -33,23 +33,24 @@ export function useAddGroup(){
 
 let id=0
 export const GroupProvider: FC<{ children: any }> = (props) => {
-    const [myGroups, setGroups] = useState<Group[]>(allGroups)
+    const [myGroups, setGroups] = useState<Group[]>([])
     const [currentGroup, setCurrentGroup] = useState<Group | null>(null)
+    const socket=useChatSocket()
 
     const addGroup=(name:string,members:string)=>{
-        let group=new Group(id++,name,splitMembersString(members))
-        console.log(group)
-        setGroups(obj=>[...obj,group])
+       // let groupTemplate={name,members:splitMembersString(members)}
+        if(socket==null) return
+        socket.emit('group-add',{name,members:splitMembersString(members)})
+       // setGroups(obj=>[...obj,])
     }
     const handleGroupChange = (id: number) => {
         let objToChange
-        if (objToChange = allGroups.find(obj => obj.id == id))
+        if (objToChange = myGroups.find(obj => obj.id == id))
             setCurrentGroup(objToChange)
     }
 
     const updateGroupLog = (msg: Message) => {
         if (currentGroup === null) return
-
         let arr = [...myGroups]
         let objectToChange
         if (objectToChange = arr.find(obj => obj.id == currentGroup.id))
@@ -57,6 +58,12 @@ export const GroupProvider: FC<{ children: any }> = (props) => {
         console.log(objectToChange)
         setGroups(arr)
     }
+
+    useEffect(()=>{
+        socket?.on('group-add',(group:any)=>{
+            setGroups(arr=>[...arr,group.group])
+        })
+    },[socket])
 
 
     return (

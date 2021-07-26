@@ -9,9 +9,9 @@ export default class Group{
 
 
     constructor(id:string,name:string,members:string[]){
-        this.msgLog=[]
         this.id=id
         this.name=name
         this.members=members
+        this.msgLog=[]
     }
 }

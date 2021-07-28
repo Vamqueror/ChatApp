@@ -30,7 +30,7 @@ const NewGroupModal:FC<ModalCloser>=(props)=>{
     } 
 
     return  <>
-      <Modal.Header closeButton>Create Contact</Modal.Header>
+      <Modal.Header closeButton>Create Group</Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Form.Group>

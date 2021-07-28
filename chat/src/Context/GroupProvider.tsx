@@ -1,6 +1,6 @@
 
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { splitMembersString} from "../generalFunctions";
+import { addMessageToGroup, findGroupById, removeDuplicates, splitMembersString } from "../generalFunctions";
 import Group from "../Group";
 import Message from "../Message";
 import { useChatSocket } from "./ChatSocketProvider";
@@ -27,55 +27,62 @@ export function useCurrentGroupUpdate() {
     return useContext(CurrentGroupUpdateContext)
 }
 
-export function useAddGroup(){
+export function useAddGroup() {
     return useContext(AddGroupContext)
 }
 
-let id=0
-export const GroupProvider: FC<{ children: any }> = (props) => {
+export const GroupProvider: FC<{ username: string, children: any }> = (props) => {
     const [myGroups, setGroups] = useState<Group[]>([])
     const [currentGroup, setCurrentGroup] = useState<Group | null>(null)
-    const socket=useChatSocket()
+    const socket = useChatSocket()
 
-    const addGroup=(name:string,members:string)=>{
-       // let groupTemplate={name,members:splitMembersString(members)}
-        if(socket==null) return
-        socket.emit('group-add',{name,members:splitMembersString(members)})
-       // setGroups(obj=>[...obj,])
+    const addGroup = (name: string, members: string) => {
+        if (socket == null) return
+        let noDups = removeDuplicates(splitMembersString(members))
+        socket.emit('group-add', { name, members: noDups })
     }
-    const handleGroupChange = (id: number) => {
+    const handleGroupChange = (id: string) => {
         let objToChange
         if (objToChange = myGroups.find(obj => obj.id == id))
             setCurrentGroup(objToChange)
     }
 
     const updateGroupLog = (msg: Message) => {
-        if (currentGroup === null) return
-        let arr = [...myGroups]
-        let objectToChange
-        if (objectToChange = arr.find(obj => obj.id == currentGroup.id))
-            objectToChange.msgLog = [...objectToChange.msgLog, msg]
-        console.log(objectToChange)
-        setGroups(arr)
+        if (currentGroup == null) return
+        let arr = addMessageToGroup([...myGroups], msg, currentGroup.id)
+        if (arr) {
+            setGroups(arr)
+            socket.emit('message', { message: msg, group: currentGroup, sender: props.username })
+        }
     }
 
-    useEffect(()=>{
-        socket?.on('group-add',(group:any)=>{
-            setGroups(arr=>[...arr,group.group])
+    useEffect(() => {
+        socket?.on('group-add', (data: any) => {
+            setGroups(arr => [...arr, data.Group])
         })
-    },[socket])
+        return () => { socket?.off('group-add') }
+    }, [socket])
 
+    useEffect(() => {
+        const addmsg = (data: { message: Message, groupid: string }) => {
+            let arr = addMessageToGroup([...myGroups], data.message, data.groupid)
+            if (arr)
+                setGroups(arr)
+        }
+        socket?.on('message', addmsg)
+        return () => { socket?.off('message') }
+    }, [socket, myGroups])
 
     return (
         <GroupContext.Provider value={myGroups}>
             <AddGroupContext.Provider value={addGroup}>
-            <CurrentGroupContext.Provider value={currentGroup}>
-                <CurrentGroupUpdateContext.Provider value={handleGroupChange}>
-                    <SendMessageContext.Provider value={updateGroupLog}>
-                        {props.children}
-                    </SendMessageContext.Provider>
-                </CurrentGroupUpdateContext.Provider>
-            </CurrentGroupContext.Provider>
+                <CurrentGroupContext.Provider value={currentGroup}>
+                    <CurrentGroupUpdateContext.Provider value={handleGroupChange}>
+                        <SendMessageContext.Provider value={updateGroupLog}>
+                            {props.children}
+                        </SendMessageContext.Provider>
+                    </CurrentGroupUpdateContext.Provider>
+                </CurrentGroupContext.Provider>
             </AddGroupContext.Provider>
         </GroupContext.Provider>
     )

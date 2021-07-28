@@ -13,7 +13,7 @@ export const ChatSocketProvider: FC<{username:string ,children: any }> = (props)
     const [socket,setSocket]=useState<Socket>()
 
     useEffect(()=>{
-        if(props.username==undefined||props.username=="") return
+        if(!props.username||props.username=="") return
         const username=props.username
         const clientSocket=io('http://localhost:4001',{query:{username}})
         setSocket(clientSocket)

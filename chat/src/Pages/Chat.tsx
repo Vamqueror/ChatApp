@@ -16,8 +16,10 @@ const Chat = () => {
     const location = useLocation<{ Username: string }>()
     let navigate = useHistory();
 
-    if (location.state == undefined || location.state.Username === '')
+    if (location.state == undefined || location.state.Username === ''){
         navigate.push('/Login')
+        return <div></div>
+    }
 
     const closeModal=()=>{
         setGroupModal(false)
@@ -30,13 +32,8 @@ const Chat = () => {
         navigate.push('/Login')
     }
 
-   /*  useEffect(() => {
-        if (location.state == undefined || location.state.Username === '')
-            navigate.push('/Login')
-    }, []) */
-
     return <ChatSocketProvider username={location.state.Username}>
-    <GroupProvider>
+    <GroupProvider username={location.state.Username}>
         <div>
         <Button  variant="danger" onClick={disconnectClick}>Disconnect</Button>
         <div className="chatApp">

@@ -11,17 +11,21 @@ export class ChatGateway {
 
   handleConnection(client: Socket) {
     const username = client.handshake.query.username
+    if(Array.isArray(username)) return
+    ChatManager.addUser(username)
     client.join(username)
     console.log(username+" is logged in")
   }
 
   @SubscribeMessage('message')
-  handleMessage(@ConnectedSocket() client: Socket, message: Message, group: Group, sender: string): void {
-    let receivers = group.members.filter(m => m != sender)
+  handleMessage(@ConnectedSocket() client: Socket, @MessageBody() data:{message: Message, group: Group, sender: string}): void {
+    let message=data.message,group=data.group,sender=data.sender
+    let receivers = group.members.filter(m => m !== sender)
     receivers.forEach(reciever => {
-      this.server.to(reciever).emit('message',JSON.stringify(message), JSON.stringify(group))
+      console.log(`sending to ${reciever}`)
+      this.server.to(reciever).emit('message',{message,groupid:group.id})
     })
-    ChatManager.addMessage(group,message)
+   // ChatManager.addMessage(group,message)
   }
 
   @SubscribeMessage('group-add')
@@ -30,7 +34,7 @@ export class ChatGateway {
     let newGroup=ChatManager.addGroup(name,members)
     console.log(newGroup)
     newGroup.members.forEach(member=>{
-      this.server.to(member).emit('group-add',{group:newGroup})
+      this.server.to(member).emit('group-add',{Group:newGroup})
     })
   }
 

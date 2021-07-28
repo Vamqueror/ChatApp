@@ -14,11 +14,11 @@ export default class ChatDB {
     }
 
     addGroup(name: string, members: string[]): Group {
-        // let existingMembers=members.filter(member=>checkIfUserExists(member,this.allUsers))
-        let existingMembers = members
+        let existingMembers=members.filter(member=>checkIfUserExists(member,this.allUsers))
+       // let existingMembers = members
         let group = new Group(uuidv4(), name, existingMembers)
         this.allGroups.push(group)
-        //addGroupToUsers(this.allUsers, group)
+        addGroupToUsers(this.allUsers, group)
         return group
     }
 

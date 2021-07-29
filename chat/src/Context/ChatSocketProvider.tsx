@@ -15,7 +15,10 @@ export const ChatSocketProvider: FC<{ username: string; children: any }> = (
   useEffect(() => {
     if (!props.username || props.username == "") return;
     const username = props.username;
-    const clientSocket = io("http://localhost:4001", { query: { username } });
+    const clientSocket = io("http://localhost:4001", {
+      query: { username },
+      path: "/chat",
+    });
     setSocket(clientSocket);
     return () => {
       clientSocket.disconnect();

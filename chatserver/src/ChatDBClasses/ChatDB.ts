@@ -12,12 +12,13 @@ export default class ChatDB {
     this.allGroups = [];
     this.allUsers = [];
   }
-
+  getUser(username: string) {
+    return this.findUserByName(this.allUsers, username);
+  }
   addGroup(name: string, members: string[]): Group {
     let existingMembers = members.filter((member) =>
       checkIfUserExists(member, this.allUsers),
     );
-    // let existingMembers = members
     let group = new Group(uuidv4(), name, existingMembers);
     this.allGroups.push(group);
     addGroupToUsers(this.allUsers, group);
@@ -35,5 +36,9 @@ export default class ChatDB {
 
   private findGroupById = (groups: Group[], id: string) => {
     return groups.find((group) => group.id === id);
+  };
+
+  private findUserByName = (users: User[], username: string) => {
+    return users.find((user) => user.username === username);
   };
 }

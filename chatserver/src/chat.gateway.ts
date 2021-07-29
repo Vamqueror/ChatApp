@@ -10,7 +10,7 @@ import {
 import { Socket, Server as ServerIO } from 'socket.io';
 import Group from './ChatDBClasses/Group';
 import Message from './ChatDBClasses/Message';
-import ChatManager from './ChatManager';
+import ChatManager from './chatManager';
 
 @WebSocketGateway({ path: '/chat' }) // {cors: {origin: '*'}}
 export class ChatGateway {

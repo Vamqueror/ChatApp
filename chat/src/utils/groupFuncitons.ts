@@ -1,14 +1,5 @@
-import Group from "./Group"
-import Message from "./Message"
-
-export const splitMembersString = (members: string) => {
-    return members.trim().replaceAll(" ", "").split(",").filter(word => word != "")
-}
-export const removeDuplicates = (members: string[]) => {
-    return members.filter((val, index, self) =>
-        index === self.findIndex((o) => (o === val))
-    )
-}
+import Group from "../classes/Group";
+import Message from "../classes/Message";
 
 export const addMessageToGroup = (groups: Group[], msg: Message, groupid: string | null | undefined) => {
     if (groupid == null) return [];

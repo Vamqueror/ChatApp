@@ -1,6 +1,5 @@
 import { Children, createContext, FC, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 
 const SocketContext=createContext<any>(null)
 

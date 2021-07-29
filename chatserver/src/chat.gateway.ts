@@ -4,7 +4,7 @@ import Group from "./ChatDBClasses/Group";
 import Message from "./ChatDBClasses/Message";
 import ChatManager from "./ChatManager";
 
-@WebSocketGateway()
+@WebSocketGateway() // {cors: {origin: '*'}}
 export class ChatGateway {
   @WebSocketServer()
   server: ServerIO;

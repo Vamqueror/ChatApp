@@ -1,6 +1,6 @@
 import {  FC, useRef } from 'react';
 import { Modal, Form,Button} from 'react-bootstrap';
-import { useAddGroup } from './Context/GroupProvider';
+import { useAddGroup } from '../Context/GroupProvider';
 
 interface ModalCloser{
   closeModal:any

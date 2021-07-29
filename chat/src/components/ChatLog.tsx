@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import './App.css';
+import '../App.css';
 import MessageBox from './MessageBox';
-import Message from './Message';
+import Message from '../classes/Message';
 import { FC } from "react";
 import { Button, Form } from 'react-bootstrap';
-import { useCurrentGroup, useSendMessage } from './Context/GroupProvider';
+import { useCurrentGroup, useSendMessage } from '../Context/GroupProvider';
 
 
 interface user {
@@ -33,9 +33,7 @@ const ChatLog: FC<user> = (props) => {
     const sendClick = (e: any) => {
         e.preventDefault()
         let user = props.username, messageText = input.current
-        // setMessages(arr => [...arr, new Message(user, messageText)])
         sendMessage(new Message(user, messageText))
-        //socket.emit('message', { user, messageText })
         resetInput()
     }
 

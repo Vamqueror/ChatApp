@@ -37,7 +37,7 @@ export function useAddGroup() {
 export const GroupProvider: FC<{ username: string; children: any }> = (
   props
 ) => {
-  const [myGroups, setGroups] = useState<Group[]>([]);
+  const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const socket = useChatSocket();
 
@@ -56,7 +56,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     if (currentGroup == null) return;
     let arr = addMessageToGroup([...myGroups], msg, currentGroup.id);
     if (arr) {
-      setGroups(arr);
+      setMyGroups(arr);
       socket.emit("message", {
         message: msg,
         group: currentGroup,
@@ -67,7 +67,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
 
   useEffect(() => {
     socket?.on("group-add", (data: any) => {
-      setGroups((arr) => [...arr, data.Group]);
+      setMyGroups((arr) => [...arr, data.Group]);
     });
     return () => {
       socket?.off("group-add");
@@ -77,7 +77,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   useEffect(() => {
     const addmsg = (data: { message: Message; groupid: string }) => {
       let arr = addMessageToGroup([...myGroups], data.message, data.groupid);
-      if (arr) setGroups(arr);
+      if (arr) setMyGroups(arr);
     };
     socket?.on("message", addmsg);
     return () => {

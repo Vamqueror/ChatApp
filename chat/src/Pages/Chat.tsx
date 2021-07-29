@@ -37,11 +37,9 @@ const Chat = () => {
             Disconnect
           </Button>
           <div className="chatApp">
-            <GroupList/>
-              <ChatLog
-                username={location.state ? location.state.Username : ""}
-              />
-              <br />
+            <GroupList />
+            <ChatLog username={location.state ? location.state.Username : ""} />
+            <br />
             <Button onClick={() => setNewGroupModal(true)}>
               Create New Group
             </Button>

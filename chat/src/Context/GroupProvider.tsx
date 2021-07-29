@@ -7,6 +7,7 @@ import { addMessageToGroup } from "../utils/groupFuncitons";
 import Group from "../classes/Group";
 import Message from "../classes/Message";
 import { useChatSocket } from "./ChatSocketProvider";
+import { fetchUserData } from "../Services/APIFetchService";
 
 const GroupContext = createContext<Group[]>([]);
 const CurrentGroupContext = createContext<Group | null>(null);
@@ -64,6 +65,10 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
       });
     }
   };
+
+  useEffect(() => {
+    fetchUserData(props.username).then(data=>setMyGroups(data.groups));
+  }, [socket]);
 
   useEffect(() => {
     socket?.on("group-add", (data: any) => {

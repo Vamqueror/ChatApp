@@ -1,17 +1,19 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import ChatManager from './chatManager'
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
+ 
+  constructor(private readonly userService: UserService) {}
 
   @Post('user-data')
-  getUserData(@Body() username:string){
-      return ChatManager.getUser(username)
+  getUserData(@Body('username') username:string){
+      return this.userService.getUser(username)
   }
 
   @Get()
   getall(){
-    return ChatManager
+    return this.userService.getAll()
   }
   
 }

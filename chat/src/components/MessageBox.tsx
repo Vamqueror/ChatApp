@@ -17,7 +17,11 @@ const MessageBox: FC<MessageProps> = (props) => {
     });
   };
 
-  return <ul className="chat">{renderMessages()}</ul>;
+  return (
+    <ul id="chatBox" className="chat">
+      {renderMessages()}
+    </ul>
+  );
 };
 
 export default MessageBox;

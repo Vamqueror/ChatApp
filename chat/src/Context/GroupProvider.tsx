@@ -67,8 +67,14 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   };
 
   useEffect(() => {
-    fetchUserData(props.username).then(data=>setMyGroups(data.groups));
+    fetchUserData(props.username).then((data) => setMyGroups(data.groups));
   }, [socket]);
+
+  useEffect(() => {
+    let element = document.getElementById("chatBox");
+    if (element)
+      element.scrollTop = element.scrollHeight - element.clientHeight;
+  }, [currentGroup]);
 
   useEffect(() => {
     socket?.on("group-add", (data: any) => {

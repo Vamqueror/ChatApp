@@ -1,7 +1,7 @@
 //TODO: List of users, remove user from group on select
 import { FC } from "react";
 import { Modal, Button, ButtonGroup } from "react-bootstrap";
-import { useCurrentGroup, useGroup } from "../Context/GroupProvider";
+import { useCurrentGroup, useGroup, useRemoveUser } from "../Context/GroupProvider";
 import { findGroupById } from "../utils/groupFuncitons";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -12,11 +12,12 @@ interface propTypes {
 const RemoveUserModal: FC<propTypes> = (props) => {
   const groups = useGroup();
   const currentGroup = useCurrentGroup();
+  const removeUser=useRemoveUser();
 
   const memberButtons = (members: string[]) => {
     return members.map((member, index) => {
       return (
-        <Button className='mt-2' onClick={(e) => {}} key={index} variant="danger">
+        <Button className='mt-2' onClick={()=>removeUser(member,currentGroup?.id)} key={index} variant="danger">
           Remove: {member}
         </Button>
       );

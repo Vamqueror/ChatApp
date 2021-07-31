@@ -42,7 +42,7 @@ const ChatLog: FC<user> = (props) => {
           type="text"
           placeholder="Type a message"
           onChange={handleChange}
-        ></Form.Control>
+        ></Form.Control><></>
         <Button variant="success" onClick={(e) => sendClick(e)}>
           Send
         </Button>

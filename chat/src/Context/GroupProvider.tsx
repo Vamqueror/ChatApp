@@ -3,7 +3,11 @@ import {
   removeDuplicates,
   splitMembersString,
 } from "../utils/generalFunctions";
-import { addMessageToGroup } from "../utils/groupFuncitons";
+import {
+  addMessageToGroup,
+  leaveGroup,
+  removeUserFromGroup,
+} from "../utils/groupFuncitons";
 import Group from "../classes/Group";
 import Message from "../classes/Message";
 import { useChatSocket } from "./ChatSocketProvider";
@@ -32,7 +36,6 @@ export function useCurrentGroupUpdate() {
   return useContext(CurrentGroupUpdateContext);
 }
 
-
 export function useAddGroup() {
   return useContext(AddGroupContext);
 }
@@ -59,9 +62,9 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
       setCurrentGroup(objToChange);
   };
 
-   const removeUser=(name:string,groupid:string)=>{
-     socket.emit("user-remove",{name,groupid})
-  } 
+  const removeUser = (name: string, groupid: string) => {
+    socket.emit("remove-user", { name, groupid });
+  };
 
   const updateGroupLog = (msg: Message) => {
     if (currentGroup == null) return;
@@ -106,13 +109,33 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     };
   }, [socket, myGroups]);
 
+  useEffect(() => {
+    const rmUser = (data: { username: string; groupid: string }) => {
+      let arr,
+        leaving = false;
+      if (props.username === data.username) {
+        arr = leaveGroup([...myGroups], data.groupid);
+        leaving = true;
+      } else
+        arr = removeUserFromGroup([...myGroups], data.groupid, data.username);
+      setMyGroups(arr);
+      if (leaving && currentGroup?.id === data.groupid) setCurrentGroup(null);
+    };
+    socket?.on("remove-user", rmUser);
+    return () => {
+      socket?.off("remove-user");
+    };
+  }, [socket, myGroups, currentGroup]);
+
   return (
     <GroupContext.Provider value={myGroups}>
       <AddGroupContext.Provider value={addGroup}>
         <CurrentGroupContext.Provider value={currentGroup}>
           <CurrentGroupUpdateContext.Provider value={handleGroupChange}>
             <SendMessageContext.Provider value={updateGroupLog}>
-              {props.children}
+              <RemoveUserContext.Provider value={removeUser}>
+                {props.children}
+              </RemoveUserContext.Provider>
             </SendMessageContext.Provider>
           </CurrentGroupUpdateContext.Provider>
         </CurrentGroupContext.Provider>

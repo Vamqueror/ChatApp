@@ -53,4 +53,22 @@ export class ChatGateway {
       this.server.to(member).emit('group-add', { Group: newGroup });
     });
   }
+
+  @SubscribeMessage('remove-user')
+  handleUserRemove(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { name: string; groupid: string },
+  ) {
+    let name = data.name,
+      groupid = data.groupid;
+    console.log(data.groupid);
+    console.log('removing ' + name);
+    let membersBeforeRemoval = [...ChatManager.getGroup(groupid).members];
+    console.log(membersBeforeRemoval);
+    ChatManager.removeUser(groupid, name);
+    membersBeforeRemoval.forEach((member) => {
+      console.log('emiting to ' + member);
+      this.server.to(member).emit('remove-user', { username: name, groupid });
+    });
+  }
 }

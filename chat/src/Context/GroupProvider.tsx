@@ -14,6 +14,7 @@ const CurrentGroupContext = createContext<Group | null>(null);
 const CurrentGroupUpdateContext = createContext<Function>(() => {});
 const SendMessageContext = createContext<Function>(() => {});
 const AddGroupContext = createContext<Function>(() => {});
+const RemoveUserContext = createContext<Function>(() => {});
 
 export function useGroup() {
   return useContext(GroupContext);
@@ -31,8 +32,13 @@ export function useCurrentGroupUpdate() {
   return useContext(CurrentGroupUpdateContext);
 }
 
+
 export function useAddGroup() {
   return useContext(AddGroupContext);
+}
+
+export function useRemoveUser() {
+  return useContext(RemoveUserContext);
 }
 
 export const GroupProvider: FC<{ username: string; children: any }> = (
@@ -52,6 +58,10 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     if ((objToChange = myGroups.find((obj) => obj.id == id)))
       setCurrentGroup(objToChange);
   };
+
+   const removeUser=(name:string,groupid:string)=>{
+     socket.emit("user-remove",{name,groupid})
+  } 
 
   const updateGroupLog = (msg: Message) => {
     if (currentGroup == null) return;

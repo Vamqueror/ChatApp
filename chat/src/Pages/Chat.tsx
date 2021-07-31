@@ -3,14 +3,16 @@ import "../App.css";
 import ChatLog from "../components/ChatLog";
 import { useLocation, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal ,ButtonGroup} from "react-bootstrap";
 import GroupList from "../components/GroupList";
 import { GroupProvider } from "../Context/GroupProvider";
 import NewGroupModal from "../components/NewGroup";
 import { ChatSocketProvider } from "../Context/ChatSocketProvider";
+import RemoveUserModal from "../components/RemoveUser";
 
 const Chat = () => {
   const [newGroupModal, setNewGroupModal] = useState(false);
+  const [removeUserModal,setRemoveUserModal]=useState(false);
   const location = useLocation<{ Username: string }>();
   let navigate = useHistory();
 
@@ -19,9 +21,13 @@ const Chat = () => {
     return <div></div>;
   }
 
-  const closeModal = () => {
+  const closeNewGroupModal = () => {
     setNewGroupModal(false);
   };
+
+  const closeRemoveUserModal=()=>{
+    setRemoveUserModal(false);
+  }
 
   const disconnectClick = (e: any) => {
     e.preventDefault();
@@ -39,16 +45,27 @@ const Chat = () => {
           <div className="chatApp">
             <GroupList />
             <ChatLog username={location.state ? location.state.Username : ""} />
-            <br />
+            <ButtonGroup vertical>
             <Button onClick={() => setNewGroupModal(true)}>
               Create New Group
             </Button>
+            <br/>
+            <Button onClick={()=> setRemoveUserModal(true)}variant="danger">
+              Remove User From Group
+            </Button>
+            </ButtonGroup>
           </div>
-          <Modal show={newGroupModal} onHide={closeModal}>
+          <Modal show={newGroupModal} onHide={closeNewGroupModal}>
             <NewGroupModal
               username={location.state.Username}
-              closeModal={closeModal}
+              closeModal={closeNewGroupModal}
             />
+          </Modal>
+        </div>
+
+        <div>
+          <Modal show={removeUserModal} onHide={closeRemoveUserModal}>
+            <RemoveUserModal username={location.state.Username}/>
           </Modal>
         </div>
       </GroupProvider>

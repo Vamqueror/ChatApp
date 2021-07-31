@@ -3,7 +3,7 @@ import { Modal, Form, Button } from "react-bootstrap";
 import { useAddGroup } from "../Context/GroupProvider";
 
 interface ModalCloser {
-  closeModal: any;
+  closeModal: Function;
   username: string;
 }
 const NewGroupModal: FC<ModalCloser> = (props) => {

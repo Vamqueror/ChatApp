@@ -22,7 +22,7 @@ const GroupList = () => {
           </Popover.Content>
         </Popover>
       }
-    ><ListGroupItem action key={index} eventKey={element.id}>
+    ><ListGroupItem action variant="danger" key={index} eventKey={element.id}>
           {element.name}
         </ListGroupItem>
     </OverlayTrigger>

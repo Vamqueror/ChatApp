@@ -9,6 +9,7 @@ import { GroupProvider } from "../Context/GroupProvider";
 import NewGroupModal from "../components/NewGroup";
 import { ChatSocketProvider } from "../Context/ChatSocketProvider";
 import RemoveUserModal from "../components/RemoveUser";
+import GroupOptions from "../components/GroupOptions";
 
 const Chat = () => {
   const [newGroupModal, setNewGroupModal] = useState(false);
@@ -49,10 +50,7 @@ const Chat = () => {
             <Button onClick={() => setNewGroupModal(true)}>
               Create New Group
             </Button>
-            <br/>
-            <Button onClick={()=> setRemoveUserModal(true)}variant="danger">
-              Remove User From Group
-            </Button>
+            <GroupOptions username={location.state.Username} setRemoveUserModal={setRemoveUserModal}/>
             </ButtonGroup>
           </div>
           <Modal show={newGroupModal} onHide={closeNewGroupModal}>

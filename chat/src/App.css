@@ -31,6 +31,9 @@ html{
 
 .grouplist{
   overflow-y:auto;
+  overflow-x:hidden;
+  min-width: 100px;
+  max-width: 100px;
 }
 
 .message{

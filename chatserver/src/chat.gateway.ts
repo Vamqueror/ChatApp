@@ -17,6 +17,7 @@ export class ChatGateway {
   @WebSocketServer()
   server: ServerIO;
 
+
   handleConnection(client: Socket) {
     const username = client.handshake.query.username;
     if (Array.isArray(username)) return;
@@ -61,13 +62,9 @@ export class ChatGateway {
   ) {
     let name = data.name,
       groupid = data.groupid;
-    console.log(data.groupid);
-    console.log('removing ' + name);
     let membersBeforeRemoval = [...ChatManager.getGroup(groupid).members];
-    console.log(membersBeforeRemoval);
     ChatManager.removeUser(groupid, name);
     membersBeforeRemoval.forEach((member) => {
-      console.log('emiting to ' + member);
       this.server.to(member).emit('remove-user', { username: name, groupid });
     });
   }

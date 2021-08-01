@@ -1,8 +1,10 @@
 import { FC, useEffect, useRef } from "react";
 import Message from "../classes/Message";
+import { Card } from "react-bootstrap";
 
 interface MessageProps {
   messageArray: Message[];
+  username:string
 }
 
 const MessageBox: FC<MessageProps> = (props) => {
@@ -23,10 +25,23 @@ const MessageBox: FC<MessageProps> = (props) => {
   const renderMessages = (): JSX.Element[] => {
     return props.messageArray.map((element, index) => {
       return (
-        <li
-          className="message"
+        <Card
+          bg={props.username===element.Username?"green":"info"}
+          style={{ width: "fit-content",maxWidth: "60%" }}
+          className={props.username===element.Username?"messageSelf":"message"}
           key={index}
-        >{`${element.Username}: ${element.Text}`}</li>
+        >
+          <Card.Body style={{fontSize:"18px"}}>{element.Text}</Card.Body>
+          {props.username!==element.Username && <Card.Title
+            style={{
+              alignSelf: "flex-end",
+              borderTop: "2px solid",
+              fontSize: "12px",
+            }}
+          >
+            {element.Username}
+          </Card.Title>}
+        </Card>
       );
     });
   };

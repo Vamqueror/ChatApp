@@ -2,14 +2,15 @@
   text-align: center;
 }
 
-
-html{
+html,body {
   background: url("./styleImages/html.png");
   background-size: cover;
+  height:100%;
 }
-.chatApp{
-  background-image: url("./styleImages/chatContainer.jpg");
-  background-size: cover;
+.chatApp {
+  /* background-image: url("./styleImages/chatContainer.jpg");
+  background-size: cover; */
+  background-color: #CF9FFF;
   display: flex;
   position: fixed;
   width: 80%;
@@ -18,34 +19,51 @@ html{
   left: 58%;
   margin-top: -50px;
   margin-left: -100px;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   padding: 20px;
   border-radius: 5px;
 }
 
-.chat{
-  overflow-y:auto;
-  height:80%;
+.chat {
+  overflow-y: auto;
+  height: 80%;
   width: 900px;
 }
 
-.grouplist{
-  overflow-y:auto;
-  overflow-x:hidden;
+.grouplist {
+  overflow-y: auto;
+  overflow-x: hidden;
   min-width: 100px;
   max-width: 100px;
 }
 
-.message{
+.message {
   border-radius: 4px;
-  background-color: darksalmon;
   margin-top: 10px;
-  clear:left;
-  float:left;
   padding: 2px;
   list-style: none;
+  float: left;
+  clear: left;
 }
-.login{
+.messageSelf {
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 2px;
+  list-style: none;
+  float: left;
+  clear: left;
+
+  /* float:right;
+  clear:right; */
+}
+
+.usernameFont {
+  align-self: "flex-end";
+  border-top: "2px solid";
+  font-size: "12px";
+}
+
+.login {
   background-image: url("./styleImages/chatContainer.jpg");
   background-size: cover;
   display: flex;
@@ -57,9 +75,9 @@ html{
   left: 55%;
   margin-top: -50px;
   margin-left: -100px;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   padding: 20px;
-  font-size:24px;
+  font-size: 24px;
   border-radius: 10%;
 }
 

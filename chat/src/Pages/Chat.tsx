@@ -44,9 +44,11 @@ const Chat = () => {
             Disconnect
           </Button>
           <div className="chatApp">
+            <div className="flex-column d-flex">
             <GroupList />
+            </div>
             <ChatLog username={location.state ? location.state.Username : ""} />
-            <ButtonGroup vertical>
+            <ButtonGroup vertical style={{marginLeft:"10px"}}>
             <Button onClick={() => setNewGroupModal(true)}>
               Create New Group
             </Button>
@@ -60,7 +62,7 @@ const Chat = () => {
             />
           </Modal>
         </div>
-
+        
         <div>
           <Modal show={removeUserModal} onHide={closeRemoveUserModal}>
             <RemoveUserModal username={location.state.Username}/>

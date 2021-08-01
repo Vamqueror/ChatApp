@@ -3,7 +3,7 @@ import "../App.css";
 import MessageBox from "./MessageBox";
 import Message from "../classes/Message";
 import { FC } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form,Row} from "react-bootstrap";
 import { useCurrentGroup, useSendMessage } from "../Context/GroupProvider";
 
 interface user {
@@ -35,7 +35,7 @@ const ChatLog: FC<user> = (props) => {
         sendClick(e);
       }}
     >
-      <Form.Group>
+      <Form.Group style={{display:"flex"}}>
         <Form.Control
           id="MessageInput"
           type="text"
@@ -54,7 +54,7 @@ const ChatLog: FC<user> = (props) => {
 
   return (
     <div>
-      <MessageBox
+    <MessageBox username={props.username}
         messageArray={currentGroup === null ? [] : currentGroup.msgLog}
       />
       <br />

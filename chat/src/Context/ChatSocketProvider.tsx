@@ -2,7 +2,7 @@ import { createContext, FC, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import ChatSocket from "../Services/ChatSocket";
 
-const SocketContext = createContext<ChatSocket|undefined>(undefined);
+const SocketContext = createContext<ChatSocket | undefined>(undefined);
 
 export function useChatSocket() {
   return useContext(SocketContext);
@@ -16,7 +16,7 @@ export const ChatSocketProvider: FC<{ username: string; children: any }> = (
   useEffect(() => {
     if (!props.username || props.username == "") return;
     const username = props.username;
-    const clientSocket = new ChatSocket(username)
+    const clientSocket = new ChatSocket(username);
     setSocket(clientSocket);
     return () => {
       clientSocket.disconnect();

@@ -1,7 +1,11 @@
 import { io, Socket } from "socket.io-client";
 import Group from "../classes/Group";
 import Message from "../classes/Message";
-import { addMessageToGroup, leaveGroup, removeUserFromGroup } from "../utils/groupFuncitons";
+import {
+  addMessageToGroup,
+  leaveGroup,
+  removeUserFromGroup,
+} from "../utils/groupFuncitons";
 
 class ChatSocket {
   socket: Socket;
@@ -13,59 +17,68 @@ class ChatSocket {
     });
   }
 
-  disconnect(){
-      this.socket.disconnect()
+  disconnect() {
+    this.socket.disconnect();
   }
 
-  addGroupSocketEvent(setMyGroups:React.Dispatch<React.SetStateAction<Group[]>>){
+  addGroupSocketEvent(
+    setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>
+  ) {
     this.socket.on("group-add", (data: any) => {
-        setMyGroups((arr) => [...arr, data.Group]);
-      });
+      setMyGroups((arr) => [...arr, data.Group]);
+    });
   }
 
-  addMsgSocketEvent(myGroups:Group[],setMyGroups:React.Dispatch<React.SetStateAction<Group[]>>){
+  addMsgSocketEvent(
+    myGroups: Group[],
+    setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>
+  ) {
     const addmsg = (data: { message: Message; groupid: string }) => {
-        let arr = addMessageToGroup([...myGroups], data.message, data.groupid);
-        if (arr) setMyGroups(arr);
-      };
-      this.socket.on("message", addmsg);
+      let arr = addMessageToGroup([...myGroups], data.message, data.groupid);
+      if (arr) setMyGroups(arr);
+    };
+    this.socket.on("message", addmsg);
   }
 
-  addRemoveUserSocketEvent(myGroups:Group[],setMyGroups:React.Dispatch<React.SetStateAction<Group[]>>,currentGroup:Group | null,setCurrentGroup:React.Dispatch<React.SetStateAction<Group | null>>,username:string){
+  addRemoveUserSocketEvent(
+    myGroups: Group[],
+    setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>,
+    currentGroup: Group | null,
+    setCurrentGroup: React.Dispatch<React.SetStateAction<Group | null>>,
+    username: string
+  ) {
     const rmUser = (data: { username: string; groupid: string }) => {
-        let arr,
-          leaving = false;
-        if (username === data.username) {
-          arr = leaveGroup([...myGroups], data.groupid);
-          leaving = true;
-        } else
-          arr = removeUserFromGroup([...myGroups], data.groupid, data.username);
-        setMyGroups(arr);
-        if (leaving && currentGroup?.id === data.groupid) setCurrentGroup(null);
-      };
-      this.socket.on("remove-user", rmUser);
+      let arr,
+        leaving = false;
+      if (username === data.username) {
+        arr = leaveGroup([...myGroups], data.groupid);
+        leaving = true;
+      } else
+        arr = removeUserFromGroup([...myGroups], data.groupid, data.username);
+      setMyGroups(arr);
+      if (leaving && currentGroup?.id === data.groupid) setCurrentGroup(null);
+    };
+    this.socket.on("remove-user", rmUser);
   }
-  
-  emitMessage(msg:Message,currentGroup:Group,username:string){
+
+  emitMessage(msg: Message, currentGroup: Group, username: string) {
     this.socket.emit("message", {
-        message: msg,
-        group: currentGroup,
-        sender: username
-      });
-
+      message: msg,
+      group: currentGroup,
+      sender: username,
+    });
   }
-  emitRemoveUser(name: string, groupid: string){
-    this.socket.emit("remove-user", { name, groupid })
-  }
-  
-  emitGroupAdd(name:string,members:string[]){
-    this.socket.emit("group-add", { name, members});
+  emitRemoveUser(name: string, groupid: string) {
+    this.socket.emit("remove-user", { name, groupid });
   }
 
-  off(event:string){
-      this.socket.off(event)
+  emitGroupAdd(name: string, members: string[]) {
+    this.socket.emit("group-add", { name, members });
   }
 
+  off(event: string) {
+    this.socket.off(event);
+  }
 }
 
 export default ChatSocket;

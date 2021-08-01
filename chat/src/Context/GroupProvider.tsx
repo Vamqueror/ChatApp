@@ -54,8 +54,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   const addGroup = (name: string, members: string) => {
     if (socket == null) return;
     let noDups = removeDuplicates(splitMembersString(members));
-    socket.emitGroupAdd(name,noDups)
-
+    socket.emitGroupAdd(name, noDups);
   };
   const handleGroupChange = (id: string) => {
     let objToChange;
@@ -64,7 +63,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   };
 
   const removeUser = (name: string, groupid: string) => {
-    socket?.emitRemoveUser(name,groupid);
+    socket?.emitRemoveUser(name, groupid);
   };
 
   const updateGroupLog = (msg: Message) => {
@@ -72,7 +71,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     let arr = addMessageToGroup([...myGroups], msg, currentGroup.id);
     if (arr) {
       setMyGroups(arr);
-      socket?.emitMessage(msg,currentGroup,props.username)
+      socket?.emitMessage(msg, currentGroup, props.username);
     }
   };
 
@@ -90,32 +89,27 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     /* socket?.on("group-add", (data: any) => {
       setMyGroups((arr) => [...arr, data.Group]);
     }); */
-    socket?.addGroupSocketEvent(setMyGroups)
+    socket?.addGroupSocketEvent(setMyGroups);
     return () => {
       socket?.off("group-add");
     };
   }, [socket]);
 
   useEffect(() => {
-    socket?.addMsgSocketEvent(myGroups,setMyGroups)
+    socket?.addMsgSocketEvent(myGroups, setMyGroups);
     return () => {
       socket?.off("message");
     };
   }, [socket, myGroups]);
 
   useEffect(() => {
-    const rmUser = (data: { username: string; groupid: string }) => {
-      let arr,
-        leaving = false;
-      if (props.username === data.username) {
-        arr = leaveGroup([...myGroups], data.groupid);
-        leaving = true;
-      } else
-        arr = removeUserFromGroup([...myGroups], data.groupid, data.username);
-      setMyGroups(arr);
-      if (leaving && currentGroup?.id === data.groupid) setCurrentGroup(null);
-    };
-    socket?.addRemoveUserSocketEvent(myGroups,setMyGroups,currentGroup,setCurrentGroup,props.username);
+    socket?.addRemoveUserSocketEvent(
+      myGroups,
+      setMyGroups,
+      currentGroup,
+      setCurrentGroup,
+      props.username
+    );
     return () => {
       socket?.off("remove-user");
     };

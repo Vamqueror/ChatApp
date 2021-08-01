@@ -11,16 +11,10 @@ interface user {
 }
 
 const ChatLog: FC<user> = (props) => {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const input = useRef("");
   const sendMessage = useSendMessage();
   const currentGroup = useCurrentGroup();
-
-  const resetInput = () => {
-    let component = document.getElementById("MessageInput");
-    input.current = "";
-    if (component && component instanceof HTMLInputElement)
-      component.value = "";
-  };
 
   const handleChange = (e: any) => {
     input.current = e.target.value;
@@ -31,24 +25,32 @@ const ChatLog: FC<user> = (props) => {
     let user = props.username,
       messageText = input.current;
     sendMessage(new Message(user, messageText));
-    resetInput();
+    formRef?.current?.reset();
   };
 
-  const chatform = currentGroup?(
-    <Form>
+  const chatform = currentGroup ? (
+    <Form
+      ref={formRef}
+      onSubmit={(e) => {
+        sendClick(e);
+      }}
+    >
       <Form.Group>
         <Form.Control
           id="MessageInput"
           type="text"
           placeholder="Type a message"
           onChange={handleChange}
-        ></Form.Control><></>
+        ></Form.Control>
+        <></>
         <Button variant="success" onClick={(e) => sendClick(e)}>
           Send
         </Button>
       </Form.Group>
     </Form>
-  ):<></>;
+  ) : (
+    <></>
+  );
 
   return (
     <div>

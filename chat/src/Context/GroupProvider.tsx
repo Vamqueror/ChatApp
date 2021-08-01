@@ -86,9 +86,6 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   }, [currentGroup]);
 
   useEffect(() => {
-    /* socket?.on("group-add", (data: any) => {
-      setMyGroups((arr) => [...arr, data.Group]);
-    }); */
     socket?.addGroupSocketEvent(setMyGroups);
     return () => {
       socket?.off("group-add");

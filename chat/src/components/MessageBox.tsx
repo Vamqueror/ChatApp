@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import Message from "../classes/Message";
 
 interface MessageProps {
@@ -6,6 +6,20 @@ interface MessageProps {
 }
 
 const MessageBox: FC<MessageProps> = (props) => {
+  const messageAutoScroll = useRef<any>(null);
+
+  useEffect(() => {
+    if (messageAutoScroll) {
+      messageAutoScroll.current.addEventListener(
+        "DOMNodeInserted",
+        (event: any) => {
+          const { currentTarget: target } = event;
+          target.scroll({ top: target.scrollHeight, behavior: "smooth" });
+        }
+      );
+    }
+  }, []);
+
   const renderMessages = (): JSX.Element[] => {
     return props.messageArray.map((element, index) => {
       return (
@@ -18,7 +32,7 @@ const MessageBox: FC<MessageProps> = (props) => {
   };
 
   return (
-    <ul id="chatBox" className="chat">
+    <ul id="chatBox" className="chat" ref={messageAutoScroll}>
       {renderMessages()}
     </ul>
   );

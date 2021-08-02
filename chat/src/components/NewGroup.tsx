@@ -11,9 +11,13 @@ const NewGroupModal: FC<ModalCloser> = (props) => {
   const membersRef = useRef("");
   const addGroup = useAddGroup();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    props.closeModal();
+    const form = e.currentTarget;
+    if (form.checkValidity() === true) {
+      createGroup();
+      props.closeModal();
+    }
   };
   const handleChangeName = (event: any) => {
     nameRef.current = event.target.value;
@@ -22,17 +26,15 @@ const NewGroupModal: FC<ModalCloser> = (props) => {
   const handleChangeMembers = (event: any) => {
     membersRef.current = event.target.value;
   };
-  const createGroupBtn = (e: any) => {
-    e.preventDefault();
+  const createGroup = () => {
     addGroup(nameRef.current, membersRef.current + "," + props.username);
-    props.closeModal();
   };
 
   return (
     <>
       <Modal.Header closeButton>Create Group</Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(e) => handleSubmit(e)}>
           <Form.Group>
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -46,13 +48,10 @@ const NewGroupModal: FC<ModalCloser> = (props) => {
             <Form.Control
               type="text"
               onChange={(e) => handleChangeMembers(e)}
-              required
             />
           </Form.Group>
           <br />
-          <Button type="submit" onClick={(e) => createGroupBtn(e)}>
-            Create
-          </Button>
+          <Button type="submit">Create</Button>
         </Form>
       </Modal.Body>
     </>

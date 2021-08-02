@@ -3,17 +3,19 @@ import "../App.css";
 import ChatLog from "../components/ChatLog";
 import { useLocation, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Modal ,ButtonGroup} from "react-bootstrap";
+import { Button, Modal, ButtonGroup } from "react-bootstrap";
 import GroupList from "../components/GroupList";
 import { GroupProvider } from "../Context/GroupProvider";
 import NewGroupModal from "../components/NewGroup";
 import { ChatSocketProvider } from "../Context/ChatSocketProvider";
 import RemoveUserModal from "../components/RemoveUser";
 import GroupOptions from "../components/GroupOptions";
+import AddUserModal from "../components/AddUser";
 
 const Chat = () => {
   const [newGroupModal, setNewGroupModal] = useState(false);
-  const [removeUserModal,setRemoveUserModal]=useState(false);
+  const [removeUserModal, setRemoveUserModal] = useState(false);
+  const [addUserModal, setAddUserModal] = useState(false);
   const location = useLocation<{ Username: string }>();
   let navigate = useHistory();
 
@@ -26,9 +28,13 @@ const Chat = () => {
     setNewGroupModal(false);
   };
 
-  const closeRemoveUserModal=()=>{
+  const closeRemoveUserModal = () => {
     setRemoveUserModal(false);
-  }
+  };
+
+  const closeAddUserModal = () => {
+    setAddUserModal(false);
+  };
 
   const disconnectClick = (e: any) => {
     e.preventDefault();
@@ -45,16 +51,22 @@ const Chat = () => {
           </Button>
           <div className="chatApp">
             <div className="flex-column d-flex">
-            <GroupList />
+              <GroupList />
             </div>
             <ChatLog username={location.state ? location.state.Username : ""} />
-            <ButtonGroup vertical style={{marginLeft:"10px"}}>
-            <Button onClick={() => setNewGroupModal(true)}>
-              Create New Group
-            </Button>
-            <GroupOptions username={location.state.Username} setRemoveUserModal={setRemoveUserModal}/>
+            <ButtonGroup vertical style={{ marginLeft: "10px" }}>
+              <Button onClick={() => setNewGroupModal(true)}>
+                Create New Group
+              </Button>
+              <GroupOptions
+                username={location.state.Username}
+                setAddUserModal={setAddUserModal}
+                setRemoveUserModal={setRemoveUserModal}
+              />
             </ButtonGroup>
           </div>
+        </div>
+        <div>
           <Modal show={newGroupModal} onHide={closeNewGroupModal}>
             <NewGroupModal
               username={location.state.Username}
@@ -62,10 +74,14 @@ const Chat = () => {
             />
           </Modal>
         </div>
-        
+        <div>
+          <Modal show={addUserModal} onHide={closeAddUserModal}>
+            <AddUserModal />
+          </Modal>
+        </div>
         <div>
           <Modal show={removeUserModal} onHide={closeRemoveUserModal}>
-            <RemoveUserModal username={location.state.Username}/>
+            <RemoveUserModal username={location.state.Username} />
           </Modal>
         </div>
       </GroupProvider>

@@ -12,9 +12,9 @@ export const checkIfUserExists=(name:string,userArr:User[])=>{
     return found
 }
 
-export const addGroupToUsers=(members:User[],group:Group)=>{
+/* export const addGroupToUsers=(members:User[],group:Group)=>{
     members.forEach(member=>{
         member.groups.push(group)
     })
-}
+} */
 

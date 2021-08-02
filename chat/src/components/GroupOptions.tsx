@@ -4,6 +4,7 @@ import { useCurrentGroup, useRemoveUser } from "../Context/GroupProvider";
 
 interface groupOptionsProps {
   setRemoveUserModal: Function;
+  setAddUserModal:Function;
   username: string;
 }
 
@@ -14,6 +15,7 @@ const GroupOptions: FC<groupOptionsProps> = (props) => {
   if (currentGroup == null) return <> </>;
   else
     return (<>
+    <Button className='mt-3' variant="success" onClick={()=>props.setAddUserModal(true)}>Add User To Group</Button>
       {currentGroup.members.length>1 && <Button className='mt-3' onClick={() => props.setRemoveUserModal(true)} variant="warning">
         Remove User From Group
       </Button>}

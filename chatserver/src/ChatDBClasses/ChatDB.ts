@@ -1,4 +1,4 @@
-import { addGroupToUsers, checkIfUserExists } from '../generalFunctions';
+import { checkIfUserExists } from '../generalFunctions';
 import Group from './Group';
 import User from './User';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,10 +13,10 @@ export default class ChatDB {
     this.allUsers = [];
   }
   getUser(username: string) {
-    return this.findUserByName(this.allUsers, username);
+    return this.findUserByName(username);
   }
   getGroup(id: string) {
-    return this.findGroupById(this.allGroups, id);
+    return this.findGroupById(id);
   }
   addGroup(name: string, members: string[]): Group {
     let existingMembers = members.filter((member) =>
@@ -24,7 +24,7 @@ export default class ChatDB {
     );
     let group = new Group(uuidv4(), name, existingMembers);
     this.allGroups.push(group);
-    addGroupToUsers(this.allUsers, group);
+    this.addGroupToUsers(group);
     return group;
   }
 
@@ -33,7 +33,7 @@ export default class ChatDB {
   }
 
   addMessage(group: Group, msg: Message) {
-    let groupToAdd = this.findGroupById(this.allGroups, group.id);
+    let groupToAdd = this.findGroupById(group.id);
     if (groupToAdd) groupToAdd.msgLog.push(msg);
   }
 
@@ -43,26 +43,37 @@ export default class ChatDB {
   }
 
   private removeFromGroups(groupId: string, username: string) {
-    let objectToChange = this.findGroupById(this.allGroups, groupId);
+    let objectToChange = this.findGroupById(groupId);
     if (objectToChange === undefined) return;
     let removeIndex = objectToChange.members.indexOf(username);
     if (removeIndex !== -1) objectToChange.members.splice(removeIndex, 1);
   }
 
   private removeFromUsers(groupId: string, username: string) {
-    let objectToChange = this.findUserByName(this.allUsers, username);
+    let objectToChange = this.findUserByName(username);
     if (objectToChange === undefined) return;
     let removeIndex = objectToChange.groups.indexOf(
-      this.findGroupById(this.allGroups, groupId),
+      this.findGroupById(groupId),
     );
     if (removeIndex !== -1) objectToChange.groups.splice(removeIndex, 1);
   }
 
-  private findGroupById = (groups: Group[], id: string) => {
-    return groups.find((group) => group.id === id);
+  private findGroupById = (id: string) => {
+    return this.allGroups.find((group) => group.id === id);
   };
 
-  private findUserByName = (users: User[], username: string) => {
-    return users.find((user) => user.username === username);
+  private findUserByName = (username: string) => {
+    return this.allUsers.find((user) => user.username === username);
+  };
+
+  private addGroupToUsers = (group: Group) => {
+    let groupMembers = [];
+    group.members.forEach((member) => {
+      groupMembers.push(this.findUserByName(member));
+    });
+
+    groupMembers.forEach((member) => {
+      member.groups.push(group);
+    });
   };
 }

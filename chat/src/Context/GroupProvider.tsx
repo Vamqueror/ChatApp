@@ -19,11 +19,15 @@ const CurrentGroupUpdateContext = createContext<Function>(() => {});
 const SendMessageContext = createContext<Function>(() => {});
 const AddGroupContext = createContext<Function>(() => {});
 const RemoveUserContext = createContext<Function>(() => {});
+const AddUserContext=createContext<Function>(() => {});
 
 export function useGroup() {
   return useContext(GroupContext);
 }
 
+export function useAddUser(){
+  return useContext(AddUserContext)
+}
 export function useSendMessage() {
   return useContext(SendMessageContext);
 }
@@ -56,11 +60,16 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     let noDups = removeDuplicates(splitMembersString(members));
     socket.emitGroupAdd(name, noDups);
   };
+
   const handleGroupChange = (id: string) => {
     let objToChange;
     if ((objToChange = myGroups.find((obj) => obj.id == id)))
       setCurrentGroup(objToChange);
   };
+
+  const addUser=(name: string, groupid: string)=>{
+    socket?.emitAddUser(groupid,name)
+  }
 
   const removeUser = (name: string, groupid: string) => {
     socket?.emitRemoveUser(name, groupid);
@@ -78,12 +87,6 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
   useEffect(() => {
     fetchUserData(props.username).then((data) => setMyGroups(data.groups));
   }, [socket]);
-
-  useEffect(() => {
-    let element = document.getElementById("chatBox");
-    if (element)
-      element.scrollTop = element.scrollHeight - element.clientHeight;
-  }, [currentGroup]);
 
   useEffect(() => {
     socket?.addGroupSocketEvent(setMyGroups);
@@ -112,6 +115,11 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     };
   }, [socket, myGroups, currentGroup]);
 
+  useEffect(()=>{
+    socket?.addAddUserSocketEvent(myGroups,setMyGroups)
+    return ()=> socket?.off("add-user")
+  },[socket,myGroups])
+
   return (
     <GroupContext.Provider value={myGroups}>
       <AddGroupContext.Provider value={addGroup}>
@@ -119,7 +127,9 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
           <CurrentGroupUpdateContext.Provider value={handleGroupChange}>
             <SendMessageContext.Provider value={updateGroupLog}>
               <RemoveUserContext.Provider value={removeUser}>
+                <AddUserContext.Provider value={addUser}>
                 {props.children}
+                </AddUserContext.Provider>
               </RemoveUserContext.Provider>
             </SendMessageContext.Provider>
           </CurrentGroupUpdateContext.Provider>

@@ -12,6 +12,16 @@ export const addMessageToGroup = (
   return groups;
 };
 
+export const addUserToGroup=(groups:Group[],groupid: string | null | undefined,username:string,msgToAdd:Message)=>{
+  if (groupid == null) return groups;
+  let objectToChange = findGroupById(groups, groupid);
+  if (objectToChange){
+    objectToChange.msgLog.push(msgToAdd)
+    objectToChange.members.push(username)
+  }
+  return groups
+}
+
 export const removeUserFromGroup = (
   groups: Group[],
   groupid: string | null | undefined,

@@ -17,7 +17,6 @@ export class ChatGateway {
   @WebSocketServer()
   server: ServerIO;
 
-
   handleConnection(client: Socket) {
     const username = client.handshake.query.username;
     if (Array.isArray(username)) return;
@@ -55,6 +54,31 @@ export class ChatGateway {
     });
   }
 
+  @SubscribeMessage('add-user')
+  handleUserAdd(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { name: string; groupid: string },
+  ) {
+    let name = data.name,
+      groupid = data.groupid;
+    let membersBeforeAddon = [...ChatManager.getGroup(groupid).members];
+    let valid = ChatManager.addUserToGroup(groupid, name);
+    if (!valid) client.emit('invalid-user');
+    else {
+      let groupToAdd = ChatManager.getGroup(groupid);
+      this.server.to(name).emit('group-add', { Group: groupToAdd });
+      membersBeforeAddon.forEach((member) => {
+        this.server
+          .to(member)
+          .emit('add-user', {
+            groupid,
+            newMember: name,
+            broadcastMsg: groupToAdd.msgLog[groupToAdd.msgLog.length - 1],
+          });
+      });
+    }
+  }
+
   @SubscribeMessage('remove-user')
   handleUserRemove(
     @ConnectedSocket() client: Socket,
@@ -63,7 +87,7 @@ export class ChatGateway {
     let name = data.name,
       groupid = data.groupid;
     let membersBeforeRemoval = [...ChatManager.getGroup(groupid).members];
-    ChatManager.removeUser(groupid, name);
+    ChatManager.removeUserFromGroup(groupid, name);
     membersBeforeRemoval.forEach((member) => {
       this.server.to(member).emit('remove-user', { username: name, groupid });
     });

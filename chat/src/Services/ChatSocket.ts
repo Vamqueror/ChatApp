@@ -3,6 +3,7 @@ import Group from "../classes/Group";
 import Message from "../classes/Message";
 import {
   addMessageToGroup,
+  addUserToGroup,
   leaveGroup,
   removeUserFromGroup,
 } from "../utils/groupFuncitons";
@@ -61,6 +62,32 @@ class ChatSocket {
     this.socket.on("remove-user", rmUser);
   }
 
+  addInvalidUserSocketEvent(setter: any) {
+    this.socket.on("invalid-user", () => {
+      setter("Invalid User");
+    });
+  }
+
+  addAddUserSocketEvent(
+    myGroups: Group[],
+    setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>
+  ) {
+    const addUser = (data: {
+      groupid: string;
+      newMember: string;
+      broadcastMsg: Message;
+    }) => {
+      let arr = addUserToGroup(
+        [...myGroups],
+        data.groupid,
+        data.newMember,
+        data.broadcastMsg
+      );
+      setMyGroups(arr);
+    };
+    this.socket.on("add-user", addUser);
+  }
+
   emitMessage(msg: Message, currentGroup: Group, username: string) {
     this.socket.emit("message", {
       message: msg,
@@ -74,6 +101,10 @@ class ChatSocket {
 
   emitGroupAdd(name: string, members: string[]) {
     this.socket.emit("group-add", { name, members });
+  }
+
+  emitAddUser(groupid: string, username: string) {
+    this.socket.emit("add-user", { name: username, groupid });
   }
 
   off(event: string) {

@@ -2,19 +2,16 @@ import { useRef } from "react";
 import "../App.css";
 import MessageBox from "./MessageBox";
 import Message from "../classes/Message";
-import { FC } from "react";
-import { Button, Form,Row} from "react-bootstrap";
+import { Button, Form, Row } from "react-bootstrap";
 import { useCurrentGroup, useSendMessage } from "../Context/GroupProvider";
+import { useUsername } from "../Context/UsernameProvider";
 
-interface user {
-  username: string;
-}
-
-const ChatLog: FC<user> = (props) => {
+const ChatLog = () => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const input = useRef("");
   const sendMessage = useSendMessage();
   const currentGroup = useCurrentGroup();
+  const username = useUsername();
 
   const handleChange = (e: any) => {
     input.current = e.target.value;
@@ -22,7 +19,7 @@ const ChatLog: FC<user> = (props) => {
 
   const sendClick = (e: any) => {
     e.preventDefault();
-    let user = props.username,
+    let user = username,
       messageText = input.current;
     sendMessage(new Message(user, messageText));
     formRef?.current?.reset();
@@ -35,7 +32,7 @@ const ChatLog: FC<user> = (props) => {
         sendClick(e);
       }}
     >
-      <Form.Group style={{display:"flex"}}>
+      <Form.Group style={{ display: "flex" }}>
         <Form.Control
           id="MessageInput"
           type="text"
@@ -54,7 +51,7 @@ const ChatLog: FC<user> = (props) => {
 
   return (
     <div>
-    <MessageBox username={props.username}
+      <MessageBox
         messageArray={currentGroup === null ? [] : currentGroup.msgLog}
       />
       <br />

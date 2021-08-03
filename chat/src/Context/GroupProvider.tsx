@@ -12,6 +12,7 @@ import Group from "../classes/Group";
 import Message from "../classes/Message";
 import { useChatSocket } from "./ChatSocketProvider";
 import { fetchUserData } from "../Services/APIFetchService";
+import { useUsername } from "./UsernameProvider";
 
 const GroupContext = createContext<Group[]>([]);
 const CurrentGroupContext = createContext<Group | null>(null);
@@ -48,12 +49,13 @@ export function useRemoveUser() {
   return useContext(RemoveUserContext);
 }
 
-export const GroupProvider: FC<{ username: string; children: any }> = (
+export const GroupProvider: FC<{ children: any }> = (
   props
 ) => {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const socket = useChatSocket();
+  const username=useUsername()
 
   const addGroup = (name: string, members: string) => {
     if (socket == null) return;
@@ -80,12 +82,12 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
     let arr = addMessageToGroup([...myGroups], msg, currentGroup.id);
     if (arr) {
       setMyGroups(arr);
-      socket?.emitMessage(msg, currentGroup, props.username);
+      socket?.emitMessage(msg, currentGroup,  username);
     }
   };
 
   useEffect(() => {
-    fetchUserData(props.username).then((data) => setMyGroups(data.groups));
+    fetchUserData( username).then((data) => setMyGroups(data.groups));
   }, [socket]);
 
   useEffect(() => {
@@ -108,7 +110,7 @@ export const GroupProvider: FC<{ username: string; children: any }> = (
       setMyGroups,
       currentGroup,
       setCurrentGroup,
-      props.username
+       username
     );
     return () => {
       socket?.off("remove-user");

@@ -1,22 +1,28 @@
-import { FC } from "react";
-import { Modal, Button, ButtonGroup,CloseButton } from "react-bootstrap";
-import { useCurrentGroup, useGroup, useRemoveUser } from "../Context/GroupProvider";
+import { Modal, Button, ButtonGroup, CloseButton } from "react-bootstrap";
+import {
+  useCurrentGroup,
+  useGroup,
+  useRemoveUser,
+} from "../Context/GroupProvider";
 import { findGroupById } from "../utils/groupFuncitons";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useUsername } from "../Context/UsernameProvider";
 
-interface propTypes {
-  username: string;
-}
-
-const RemoveUserModal: FC<propTypes> = (props) => {
+const RemoveUserModal = () => {
   const groups = useGroup();
   const currentGroup = useCurrentGroup();
-  const removeUser=useRemoveUser();
+  const removeUser = useRemoveUser();
+  const username = useUsername();
 
   const memberButtons = (members: string[]) => {
     return members.map((member, index) => {
       return (
-        <Button className='mt-2' onClick={()=>removeUser(member,currentGroup?.id)} key={index} variant="danger">
+        <Button
+          className="mt-2"
+          onClick={() => removeUser(member, currentGroup?.id)}
+          key={index}
+          variant="danger"
+        >
           Remove: {member}
         </Button>
       );
@@ -27,7 +33,7 @@ const RemoveUserModal: FC<propTypes> = (props) => {
     let members;
     if (!currentGroup) return;
     members = findGroupById(groups, currentGroup.id)?.members.filter(
-      (m) => m !== props.username
+      (m) => m !== username
     );
     if (members) return memberButtons(members);
     return;

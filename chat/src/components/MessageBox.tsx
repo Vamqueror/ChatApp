@@ -1,14 +1,15 @@
 import { FC, useEffect, useRef } from "react";
 import Message from "../classes/Message";
 import { Card } from "react-bootstrap";
+import { useUsername } from "../Context/UsernameProvider";
 
 interface MessageProps {
   messageArray: Message[];
-  username:string
 }
 
 const MessageBox: FC<MessageProps> = (props) => {
   const messageAutoScroll = useRef<any>(null);
+  const username = useUsername();
 
   useEffect(() => {
     if (messageAutoScroll) {
@@ -26,21 +27,23 @@ const MessageBox: FC<MessageProps> = (props) => {
     return props.messageArray.map((element, index) => {
       return (
         <Card
-          bg={props.username===element.Username?"green":"info"}
-          style={{ width: "fit-content",maxWidth: "60%" }}
-          className={props.username===element.Username?"messageSelf":"message"}
+          bg={username === element.Username ? "green" : "info"}
+          style={{ width: "fit-content", maxWidth: "60%" }}
+          className={username === element.Username ? "messageSelf" : "message"}
           key={index}
         >
-          <Card.Body style={{fontSize:"18px"}}>{element.Text}</Card.Body>
-          {props.username!==element.Username && <Card.Title
-            style={{
-              alignSelf: "flex-end",
-              borderTop: "2px solid",
-              fontSize: "12px",
-            }}
-          >
-            {element.Username}
-          </Card.Title>}
+          <Card.Body style={{ fontSize: "18px" }}>{element.Text}</Card.Body>
+          {username !== element.Username && (
+            <Card.Title
+              style={{
+                alignSelf: "flex-end",
+                borderTop: "2px solid",
+                fontSize: "12px",
+              }}
+            >
+              {element.Username}
+            </Card.Title>
+          )}
         </Card>
       );
     });

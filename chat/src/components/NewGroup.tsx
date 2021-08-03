@@ -1,15 +1,16 @@
 import { FC, useRef } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import { useAddGroup } from "../Context/GroupProvider";
+import { useUsername } from "../Context/UsernameProvider";
 
 interface ModalCloser {
   closeModal: Function;
-  username: string;
 }
 const NewGroupModal: FC<ModalCloser> = (props) => {
   const nameRef = useRef("");
   const membersRef = useRef("");
   const addGroup = useAddGroup();
+  const username = useUsername();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +28,7 @@ const NewGroupModal: FC<ModalCloser> = (props) => {
     membersRef.current = event.target.value;
   };
   const createGroup = () => {
-    addGroup(nameRef.current, membersRef.current + "," + props.username);
+    addGroup(nameRef.current, membersRef.current + "," + username);
   };
 
   return (

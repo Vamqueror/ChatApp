@@ -1,16 +1,17 @@
 import { FC } from "react";
 import { Button } from "react-bootstrap";
 import { useCurrentGroup, useRemoveUser } from "../Context/GroupProvider";
+import { useUsername } from "../Context/UsernameProvider";
 
 interface groupOptionsProps {
   setRemoveUserModal: Function;
   setAddUserModal:Function;
-  username: string;
 }
 
 const GroupOptions: FC<groupOptionsProps> = (props) => {
   const currentGroup = useCurrentGroup();
   const removeUser = useRemoveUser();
+  const username=useUsername()
 
   if (currentGroup == null) return <> </>;
   else
@@ -19,7 +20,7 @@ const GroupOptions: FC<groupOptionsProps> = (props) => {
       {currentGroup.members.length>1 && <Button className='mt-3' onClick={() => props.setRemoveUserModal(true)} variant="warning">
         Remove User From Group
       </Button>}
-      <Button className='mt-3' variant="danger" onClick={() => removeUser(props.username, currentGroup.id)}>
+      <Button className='mt-3' variant="danger" onClick={() => removeUser( username, currentGroup.id)}>
         Leave Group
       </Button>
     </>);

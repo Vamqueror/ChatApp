@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import ChatManager from './chatManager';
+import ChatManager from '../chatManager';
 
 @Injectable()
 export class UserService {

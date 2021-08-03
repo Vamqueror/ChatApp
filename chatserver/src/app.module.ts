@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatGateway } from './chat.gateway';
-import { UserModule } from './user.module';
+import { UserModule } from './UserModule/user.module';
 
 @Module({
   imports: [UserModule],

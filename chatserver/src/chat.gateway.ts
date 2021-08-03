@@ -10,17 +10,19 @@ import {
 import { Socket, Server as ServerIO } from 'socket.io';
 import Group from './ChatDBClasses/Group';
 import Message from './ChatDBClasses/Message';
-import ChatManager from './chatManager';
+import { ChatService } from './ChatModule/chat.service';
 
 @WebSocketGateway({ path: '/chat' }) // {cors: {origin: '*'}}
 export class ChatGateway {
   @WebSocketServer()
   server: ServerIO;
 
+  constructor(private readonly chatService: ChatService) {}
+
   handleConnection(client: Socket) {
     const username = client.handshake.query.username;
     if (Array.isArray(username)) return;
-    ChatManager.addUser(username);
+    this.chatService.addUser(username);
     client.join(username);
     console.log(username + ' is logged in');
   }
@@ -33,12 +35,10 @@ export class ChatGateway {
     let message = data.message,
       group = data.group,
       sender = data.sender;
-    let receivers = group.members.filter((m) => m !== sender);
+    let receivers = this.chatService.messageHandler(group, sender, message);
     receivers.forEach((reciever) => {
-      console.log(`sending to ${reciever}`);
       this.server.to(reciever).emit('message', { message, groupid: group.id });
     });
-    ChatManager.addMessage(group, message);
   }
 
   @SubscribeMessage('group-add')
@@ -48,7 +48,7 @@ export class ChatGateway {
   ) {
     let name = data.name,
       members = data.members;
-    let newGroup = ChatManager.addGroup(name, members);
+    let newGroup = this.chatService.addGroup(name, members);
     newGroup.members.forEach((member) => {
       this.server.to(member).emit('group-add', { Group: newGroup });
     });
@@ -61,20 +61,18 @@ export class ChatGateway {
   ) {
     let name = data.name,
       groupid = data.groupid;
-    let membersBeforeAddon = [...ChatManager.getGroup(groupid).members];
-    let valid = ChatManager.addUserToGroup(groupid, name);
+    let membersBeforeAddon = this.chatService.currentMembers(groupid);
+    let valid = this.chatService.addUserToGroup(groupid, name);
     if (!valid) client.emit('invalid-user');
     else {
-      let groupToAdd = ChatManager.getGroup(groupid);
+      let groupToAdd = this.chatService.getGroup(groupid);
       this.server.to(name).emit('group-add', { Group: groupToAdd });
       membersBeforeAddon.forEach((member) => {
-        this.server
-          .to(member)
-          .emit('add-user', {
-            groupid,
-            newMember: name,
-            broadcastMsg: groupToAdd.msgLog[groupToAdd.msgLog.length - 1],
-          });
+        this.server.to(member).emit('add-user', {
+          groupid,
+          newMember: name,
+          broadcastMsg: groupToAdd.msgLog[groupToAdd.msgLog.length - 1],
+        });
       });
     }
   }
@@ -86,8 +84,8 @@ export class ChatGateway {
   ) {
     let name = data.name,
       groupid = data.groupid;
-    let membersBeforeRemoval = [...ChatManager.getGroup(groupid).members];
-    ChatManager.removeUserFromGroup(groupid, name);
+    let membersBeforeRemoval = this.chatService.currentMembers(groupid);
+    this.chatService.removeUserFromGroup(groupid, name);
     membersBeforeRemoval.forEach((member) => {
       this.server.to(member).emit('remove-user', { username: name, groupid });
     });

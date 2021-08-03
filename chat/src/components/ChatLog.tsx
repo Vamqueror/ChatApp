@@ -34,7 +34,6 @@ const ChatLog = () => {
     >
       <Form.Group style={{ display: "flex" }}>
         <Form.Control
-          id="MessageInput"
           type="text"
           placeholder="Type a message"
           onChange={handleChange}

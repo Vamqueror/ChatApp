@@ -1,6 +1,20 @@
 import Group from "../classes/Group";
 import Message from "../classes/Message";
 
+export const restrictAllGroups = (username: string, groups: Group[]) => {
+  groups.forEach((group) => (group = restrictHistory(username, group)));
+  return groups;
+};
+
+export const restrictHistory = (username: string, group: Group) => {
+  let statusMsg = group.msgLog
+    .reverse()
+    .find((msg) => msg.isStatus === true && msg.Username === username);
+  group.msgLog.reverse();
+  if (statusMsg) group.msgLog.splice(0, group.msgLog.lastIndexOf(statusMsg));
+  return group;
+};
+
 export const addMessageToGroup = (
   groups: Group[],
   msg: Message,
@@ -12,15 +26,20 @@ export const addMessageToGroup = (
   return groups;
 };
 
-export const addUserToGroup=(groups:Group[],groupid: string | null | undefined,username:string,msgToAdd:Message)=>{
+export const addUserToGroup = (
+  groups: Group[],
+  groupid: string | null | undefined,
+  username: string,
+  msgToAdd: Message
+) => {
   if (groupid == null) return groups;
   let objectToChange = findGroupById(groups, groupid);
-  if (objectToChange){
-    objectToChange.msgLog.push(msgToAdd)
-    objectToChange.members.push(username)
+  if (objectToChange) {
+    objectToChange.msgLog.push(msgToAdd);
+    objectToChange.members.push(username);
   }
-  return groups
-}
+  return groups;
+};
 
 export const removeUserFromGroup = (
   groups: Group[],

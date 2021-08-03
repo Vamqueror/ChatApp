@@ -27,7 +27,13 @@ const MessageBox: FC<MessageProps> = (props) => {
     return props.messageArray.map((element, index) => {
       return (
         <Card
-          bg={username === element.Username ? "green" : "info"}
+          bg={
+            element.isStatus
+              ? "secondary"
+              : username === element.Username
+              ? "green"
+              : "info"
+          }
           style={{ width: "fit-content", maxWidth: "60%" }}
           className={username === element.Username ? "messageSelf" : "message"}
           key={index}

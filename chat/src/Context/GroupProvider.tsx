@@ -4,9 +4,7 @@ import {
   splitMembersString,
 } from "../utils/generalFunctions";
 import {
-  addMessageToGroup,
-  leaveGroup,
-  removeUserFromGroup,
+  addMessageToGroup, restrictAllGroups,
 } from "../utils/groupFuncitons";
 import Group from "../classes/Group";
 import Message from "../classes/Message";
@@ -87,11 +85,14 @@ export const GroupProvider: FC<{ children: any }> = (
   };
 
   useEffect(() => {
-    fetchUserData( username).then((data) => setMyGroups(data.groups));
+    fetchUserData( username).then((data) => {
+      let fetchedGroups=restrictAllGroups(username,data.groups)
+      setMyGroups(fetchedGroups)
+    });
   }, [socket]);
 
   useEffect(() => {
-    socket?.addGroupSocketEvent(setMyGroups);
+    socket?.addGroupSocketEvent(username,setMyGroups);
     return () => {
       socket?.off("group-add");
     };

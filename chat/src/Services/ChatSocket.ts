@@ -6,6 +6,7 @@ import {
   addUserToGroup,
   leaveGroup,
   removeUserFromGroup,
+  restrictHistory,
 } from "../utils/groupFuncitons";
 
 class ChatSocket {
@@ -22,11 +23,12 @@ class ChatSocket {
     this.socket.disconnect();
   }
 
-  addGroupSocketEvent(
+  addGroupSocketEvent(username:string,
     setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>
   ) {
     this.socket.on("group-add", (data: any) => {
-      setMyGroups((arr) => [...arr, data.Group]);
+      let newGroup=restrictHistory(username,data.Group)
+      setMyGroups((arr) => [...arr, newGroup]);
     });
   }
 

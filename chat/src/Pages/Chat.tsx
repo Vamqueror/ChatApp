@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 import "../App.css";
 import ChatLog from "../components/ChatLog";
 import { useLocation, useHistory } from "react-router-dom";
@@ -12,11 +12,12 @@ import RemoveUserModal from "../components/RemoveUser";
 import GroupOptions from "../components/GroupOptions";
 import AddUserModal from "../components/AddUser";
 import { UsernameProvider } from "../Context/UsernameProvider";
-
+import NewDMModal from "../components/NewDM";
 const Chat = () => {
   const [newGroupModal, setNewGroupModal] = useState(false);
   const [removeUserModal, setRemoveUserModal] = useState(false);
   const [addUserModal, setAddUserModal] = useState(false);
+  const [newDMModal, setNewDMModal] = useState(false);
   const location = useLocation<{ Username: string }>();
   let navigate = useHistory();
 
@@ -35,6 +36,10 @@ const Chat = () => {
 
   const closeAddUserModal = () => {
     setAddUserModal(false);
+  };
+
+  const closeNewDMModal = () => {
+    setNewDMModal(false);
   };
 
   const disconnectClick = (e: any) => {
@@ -56,22 +61,30 @@ const Chat = () => {
                 <GroupList />
               </div>
               <div className="chatLog">
-              <ChatLog />
-              <ButtonGroup vertical style={{ marginLeft: "10px" }}>
-                <Button onClick={() => setNewGroupModal(true)}>
-                  Create New Group
-                </Button>
-                <GroupOptions
-                  setAddUserModal={setAddUserModal}
-                  setRemoveUserModal={setRemoveUserModal}
-                />
-              </ButtonGroup>
+                <ChatLog />
+                <ButtonGroup vertical style={{ marginLeft: "10px" }}>
+                  <Button onClick={() => setNewGroupModal(true)}>
+                    Create New Group
+                  </Button>
+                  <Button variant="info" className='mt-3' onClick={()=>{setNewDMModal(true)}}>
+                    Create New DM
+                  </Button>
+                  <GroupOptions
+                    setAddUserModal={setAddUserModal}
+                    setRemoveUserModal={setRemoveUserModal}
+                  />
+                </ButtonGroup>
               </div>
             </div>
           </div>
           <div>
             <Modal show={newGroupModal} onHide={closeNewGroupModal}>
               <NewGroupModal closeModal={closeNewGroupModal} />
+            </Modal>
+          </div>
+          <div>
+            <Modal show={newDMModal} onHide={closeNewDMModal}>
+              <NewDMModal closeModal={closeNewDMModal} />
             </Modal>
           </div>
           <div>

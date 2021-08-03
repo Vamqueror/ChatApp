@@ -17,11 +17,11 @@ export default class ChatDB {
   getGroup(id: string) {
     return this.findGroupById(id);
   }
-  addGroup(name: string, members: string[]): Group {
+  addGroup(name: string, members: string[],isDM:boolean): Group {
     let existingMembers = members.filter((member) =>
       this.checkIfUserExists(member),
     );
-    let group = new Group(uuidv4(), name, existingMembers);
+    let group = new Group(uuidv4(), name, existingMembers,isDM);
     this.allGroups.push(group);
     this.addGroupToUsers(group);
     return group;
@@ -50,7 +50,7 @@ export default class ChatDB {
 
   private checkIfUserExists=(name:string)=>{
     let found = false;
-    for(var i = 0; i < this.allUsers.length; i++) {
+    for(let i = 0; i < this.allUsers.length; i++) {
         if (this.allUsers[i].username == name) {
             found = true;
             break;

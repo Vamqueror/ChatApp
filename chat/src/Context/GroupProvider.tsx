@@ -3,9 +3,7 @@ import {
   removeDuplicates,
   splitMembersString,
 } from "../utils/generalFunctions";
-import {
-  addMessageToGroup, restrictAllGroups,
-} from "../utils/groupFuncitons";
+import { addMessageToGroup, restrictAllGroups } from "../utils/groupFuncitons";
 import Group from "../classes/Group";
 import Message from "../classes/Message";
 import { useChatSocket } from "./ChatSocketProvider";
@@ -18,14 +16,14 @@ const CurrentGroupUpdateContext = createContext<Function>(() => {});
 const SendMessageContext = createContext<Function>(() => {});
 const AddGroupContext = createContext<Function>(() => {});
 const RemoveUserContext = createContext<Function>(() => {});
-const AddUserContext=createContext<Function>(() => {});
+const AddUserContext = createContext<Function>(() => {});
 
 export function useGroup() {
   return useContext(GroupContext);
 }
 
-export function useAddUser(){
-  return useContext(AddUserContext)
+export function useAddUser() {
+  return useContext(AddUserContext);
 }
 export function useSendMessage() {
   return useContext(SendMessageContext);
@@ -47,18 +45,16 @@ export function useRemoveUser() {
   return useContext(RemoveUserContext);
 }
 
-export const GroupProvider: FC<{ children: any }> = (
-  props
-) => {
+export const GroupProvider: FC<{ children: any }> = (props) => {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const socket = useChatSocket();
-  const username=useUsername()
+  const username = useUsername();
 
-  const addGroup = (name: string, members: string) => {
+  const addGroup = (name: string, members: string, isDM: boolean) => {
     if (socket == null) return;
     let noDups = removeDuplicates(splitMembersString(members));
-    socket.emitGroupAdd(name, noDups);
+    socket.emitGroupAdd(name, noDups, isDM);
   };
 
   const handleGroupChange = (id: string) => {
@@ -67,9 +63,9 @@ export const GroupProvider: FC<{ children: any }> = (
       setCurrentGroup(objToChange);
   };
 
-  const addUser=(name: string, groupid: string)=>{
-    socket?.emitAddUser(groupid,name)
-  }
+  const addUser = (name: string, groupid: string) => {
+    socket?.emitAddUser(groupid, name);
+  };
 
   const removeUser = (name: string, groupid: string) => {
     socket?.emitRemoveUser(name, groupid);
@@ -80,19 +76,19 @@ export const GroupProvider: FC<{ children: any }> = (
     let arr = addMessageToGroup([...myGroups], msg, currentGroup.id);
     if (arr) {
       setMyGroups(arr);
-      socket?.emitMessage(msg, currentGroup,  username);
+      socket?.emitMessage(msg, currentGroup, username);
     }
   };
 
   useEffect(() => {
-    fetchUserData( username).then((data) => {
-      let fetchedGroups=restrictAllGroups(username,data.groups)
-      setMyGroups(fetchedGroups)
+    fetchUserData(username).then((data) => {
+      let fetchedGroups = restrictAllGroups(username, data.groups);
+      setMyGroups(fetchedGroups);
     });
   }, [socket]);
 
   useEffect(() => {
-    socket?.addGroupSocketEvent(username,setMyGroups);
+    socket?.addGroupSocketEvent(username, setMyGroups);
     return () => {
       socket?.off("group-add");
     };
@@ -111,17 +107,17 @@ export const GroupProvider: FC<{ children: any }> = (
       setMyGroups,
       currentGroup,
       setCurrentGroup,
-       username
+      username
     );
     return () => {
       socket?.off("remove-user");
     };
   }, [socket, myGroups, currentGroup]);
 
-  useEffect(()=>{
-    socket?.addAddUserSocketEvent(myGroups,setMyGroups)
-    return ()=> socket?.off("add-user")
-  },[socket,myGroups])
+  useEffect(() => {
+    socket?.addAddUserSocketEvent(myGroups, setMyGroups);
+    return () => socket?.off("add-user");
+  }, [socket, myGroups]);
 
   return (
     <GroupContext.Provider value={myGroups}>
@@ -131,7 +127,7 @@ export const GroupProvider: FC<{ children: any }> = (
             <SendMessageContext.Provider value={updateGroupLog}>
               <RemoveUserContext.Provider value={removeUser}>
                 <AddUserContext.Provider value={addUser}>
-                {props.children}
+                  {props.children}
                 </AddUserContext.Provider>
               </RemoveUserContext.Provider>
             </SendMessageContext.Provider>

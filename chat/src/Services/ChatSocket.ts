@@ -23,11 +23,14 @@ class ChatSocket {
     this.socket.disconnect();
   }
 
-  addGroupSocketEvent(username:string,
+  addGroupSocketEvent(
+    username: string,
     setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>
   ) {
-    this.socket.on("group-add", (data: any) => {
-      let newGroup=restrictHistory(username,data.Group)
+    this.socket.on("group-add", (data: { Group: Group }) => {
+      let newGroup = data.Group;
+      if (data.Group.isDM === false)
+        newGroup = restrictHistory(username, data.Group);
       setMyGroups((arr) => [...arr, newGroup]);
     });
   }
@@ -101,8 +104,8 @@ class ChatSocket {
     this.socket.emit("remove-user", { name, groupid });
   }
 
-  emitGroupAdd(name: string, members: string[]) {
-    this.socket.emit("group-add", { name, members });
+  emitGroupAdd(name: string, members: string[], isDM: boolean) {
+    this.socket.emit("group-add", { name, members, isDM });
   }
 
   emitAddUser(groupid: string, username: string) {

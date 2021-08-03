@@ -12,8 +12,8 @@ export class ChatService {
     ChatManager.addMessage(group, message);
     return group.members.filter((m) => m !== sender);
   }
-  addGroup(name: string, members: string[]) {
-    return ChatManager.addGroup(name, members);
+  addGroup(name: string, members: string[],isDM:boolean) {
+    return ChatManager.addGroup(name, members,isDM);
   }
   currentMembers(groupid: string) {
     return [...ChatManager.getGroup(groupid).members];

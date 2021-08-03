@@ -1,7 +1,6 @@
 import "../App.css";
 import { ListGroup, ListGroupItem,OverlayTrigger,Popover } from "react-bootstrap";
 import { useGroup, useCurrentGroupUpdate } from "../Context/GroupProvider";
-import { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const GroupList = () => {
@@ -16,10 +15,10 @@ const GroupList = () => {
       placement="left"
       overlay={
         <Popover id={element.id}>
-          <Popover.Title as="h3">{`Group Members`}</Popover.Title>
-          <Popover.Content>
+          <Popover.Header as="h3">{`Group Members`}</Popover.Header>
+          <Popover.Body>
             {element.members.map((member)=>`${member}\n`)}
-          </Popover.Content>
+          </Popover.Body>
         </Popover>
       }
     ><ListGroupItem action variant="secondary" key={index} eventKey={element.id}>

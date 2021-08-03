@@ -1,8 +1,6 @@
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -12,7 +10,7 @@ import Group from './ChatDBClasses/Group';
 import Message from './ChatDBClasses/Message';
 import { ChatService } from './ChatModule/chat.service';
 
-@WebSocketGateway({ path: '/chat' }) // {cors: {origin: '*'}}
+@WebSocketGateway({ path: '/chat', cors: { origin: '*' } }) // {cors: {origin: '*'}}
 export class ChatGateway {
   @WebSocketServer()
   server: ServerIO;
@@ -22,7 +20,7 @@ export class ChatGateway {
   handleConnection(client: Socket) {
     const username = client.handshake.query.username;
     if (Array.isArray(username)) return;
-    this.chatService.addUser(username);
+    this.chatService.addUser(username); //check if exist
     client.join(username);
     console.log(username + ' is logged in');
   }
@@ -44,11 +42,12 @@ export class ChatGateway {
   @SubscribeMessage('group-add')
   handleGroup(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { name: string; members: string[] },
+    @MessageBody() data: { name: string; members: string[]; isDM: boolean },
   ) {
     let name = data.name,
-      members = data.members;
-    let newGroup = this.chatService.addGroup(name, members);
+      members = data.members,
+      isDM = data.isDM;
+    let newGroup = this.chatService.addGroup(name, members, isDM);
     newGroup.members.forEach((member) => {
       this.server.to(member).emit('group-add', { Group: newGroup });
     });

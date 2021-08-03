@@ -14,7 +14,6 @@ export const ChatSocketProvider: FC<{ children: any }> = (
   const username = useUsername();
 
   useEffect(() => {
-    console.log(username)
     if (!username || username == "") return;
     const clientSocket = new ChatSocket(username);
     setSocket(clientSocket);

@@ -48,9 +48,12 @@ export class ChatGateway {
       members = data.members,
       isDM = data.isDM;
     let newGroup = this.chatService.addGroup(name, members, isDM);
-    newGroup.members.forEach((member) => {
-      this.server.to(member).emit('group-add', { Group: newGroup });
-    });
+    if (newGroup.isDM && newGroup.members.length === 1)
+      client.emit('invalid-dm', { errorMsg: 'Invalid User' });
+    else
+      newGroup.members.forEach((member) => {
+        this.server.to(member).emit('group-add', { Group: newGroup });
+      });
   }
 
   @SubscribeMessage('add-user')

@@ -73,6 +73,13 @@ class ChatSocket {
     });
   }
 
+  addInvalidDMSocketEvent(setter:any){
+    const displayError=(data:{errorMsg:string})=>{
+      setter(data.errorMsg)
+    }
+    this.socket.on("invalid-dm",displayError)
+  }
+
   addAddUserSocketEvent(
     myGroups: Group[],
     setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>

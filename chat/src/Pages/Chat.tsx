@@ -55,6 +55,7 @@ const Chat = () => {
               <div className="flex-column d-flex">
                 <GroupList />
               </div>
+              <div className="chatLog">
               <ChatLog />
               <ButtonGroup vertical style={{ marginLeft: "10px" }}>
                 <Button onClick={() => setNewGroupModal(true)}>
@@ -65,6 +66,7 @@ const Chat = () => {
                   setRemoveUserModal={setRemoveUserModal}
                 />
               </ButtonGroup>
+              </div>
             </div>
           </div>
           <div>

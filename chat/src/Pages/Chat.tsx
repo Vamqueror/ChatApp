@@ -1,18 +1,18 @@
 import { useState } from "react";
 import "../App.css";
-import ChatLog from "../components/ChatLog";
+import ChatLog from "../components/messages/ChatLog";
 import { useLocation, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Modal, ButtonGroup } from "react-bootstrap";
-import GroupList from "../components/GroupList";
+import GroupList from "../components/groups/GroupList";
 import { GroupProvider } from "../Context/GroupProvider";
-import NewGroupModal from "../components/NewGroup";
+import NewGroupModal from "../components/modals/NewGroup";
 import { ChatSocketProvider } from "../Context/ChatSocketProvider";
-import RemoveUserModal from "../components/RemoveUser";
-import GroupOptions from "../components/GroupOptions";
-import AddUserModal from "../components/AddUser";
+import RemoveUserModal from "../components/modals/RemoveUser";
+import GroupOptions from "../components/groups/GroupOptions";
+import AddUserModal from "../components/modals/AddUser";
 import { UsernameProvider } from "../Context/UsernameProvider";
-import NewDMModal from "../components/NewDM";
+import NewDMModal from "../components/modals/NewDM";
 const Chat = () => {
   const [newGroupModal, setNewGroupModal] = useState(false);
   const [removeUserModal, setRemoveUserModal] = useState(false);

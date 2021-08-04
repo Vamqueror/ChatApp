@@ -1,7 +1,8 @@
 import { FC, useEffect, useRef } from "react";
-import Message from "../classes/Message";
+import Message from "../../classes/Message";
 import { Card } from "react-bootstrap";
-import { useUsername } from "../Context/UsernameProvider";
+import { useUsername } from "../../Context/UsernameProvider";
+import "../../App.css"
 
 interface MessageProps {
   messageArray: Message[];

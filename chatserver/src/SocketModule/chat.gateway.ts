@@ -6,9 +6,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Server as ServerIO } from 'socket.io';
-import Group from './ChatDBClasses/Group';
-import Message from './ChatDBClasses/Message';
-import { ChatService } from './ChatModule/chat.service';
+import Group from '../ChatDBClasses/Group';
+import Message from '../ChatDBClasses/Message';
+import { ChatService } from '../ChatModule/chat.service';
 
 @WebSocketGateway({ path: '/chat', cors: { origin: '*' } }) // {cors: {origin: '*'}}
 export class ChatGateway {

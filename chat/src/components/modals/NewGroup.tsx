@@ -1,7 +1,7 @@
 import { FC, useRef } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
-import { useAddGroup } from "../Context/GroupProvider";
-import { useUsername } from "../Context/UsernameProvider";
+import { useAddGroup } from "../../Context/GroupProvider";
+import { useUsername } from "../../Context/UsernameProvider";
 
 interface ModalCloser {
   closeModal: Function;

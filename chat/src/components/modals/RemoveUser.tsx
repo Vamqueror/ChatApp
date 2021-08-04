@@ -3,10 +3,10 @@ import {
   useCurrentGroup,
   useGroup,
   useRemoveUser,
-} from "../Context/GroupProvider";
-import { findGroupById } from "../utils/groupFuncitons";
+} from "../../Context/GroupProvider";
+import { findGroupById } from "../../utils/groupFuncitons";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useUsername } from "../Context/UsernameProvider";
+import { useUsername } from "../../Context/UsernameProvider";
 
 const RemoveUserModal = () => {
   const groups = useGroup();

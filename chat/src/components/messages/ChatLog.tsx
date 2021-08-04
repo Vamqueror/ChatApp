@@ -1,10 +1,10 @@
 import { useRef } from "react";
-import "../App.css";
+import "../../App.css"
 import MessageBox from "./MessageBox";
-import Message from "../classes/Message";
+import Message from "../../classes/Message";
 import { Button, Form, Row } from "react-bootstrap";
-import { useCurrentGroup, useSendMessage } from "../Context/GroupProvider";
-import { useUsername } from "../Context/UsernameProvider";
+import { useCurrentGroup, useSendMessage } from "../../Context/GroupProvider";
+import { useUsername } from "../../Context/UsernameProvider";
 
 const ChatLog = () => {
   const formRef = useRef<HTMLFormElement | null>(null);

@@ -1,9 +1,9 @@
-import "../App.css";
+import "../../App.css";
 import { ListGroup, ListGroupItem,OverlayTrigger,Popover } from "react-bootstrap";
-import { useGroup, useCurrentGroupUpdate } from "../Context/GroupProvider";
+import { useGroup, useCurrentGroupUpdate } from "../../Context/GroupProvider";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useUsername } from "../Context/UsernameProvider";
-import { groupName } from "../utils/groupListFunctions";
+import { useUsername } from "../../Context/UsernameProvider";
+import { groupName } from "../../utils/groupListFunctions";
 
 const GroupList = () => {
   const groups = useGroup();

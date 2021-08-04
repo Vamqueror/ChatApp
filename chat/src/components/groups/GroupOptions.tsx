@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Button } from "react-bootstrap";
-import { useCurrentGroup, useRemoveUser } from "../Context/GroupProvider";
-import { useUsername } from "../Context/UsernameProvider";
+import { useCurrentGroup, useRemoveUser } from "../../Context/GroupProvider";
+import { useUsername } from "../../Context/UsernameProvider";
 
 interface groupOptionsProps {
   setRemoveUserModal: Function;

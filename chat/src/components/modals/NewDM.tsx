@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
-import { useChatSocket } from "../Context/ChatSocketProvider";
-import { useAddGroup } from "../Context/GroupProvider";
-import { useUsername } from "../Context/UsernameProvider";
+import { useChatSocket } from "../../Context/ChatSocketProvider";
+import { useAddGroup } from "../../Context/GroupProvider";
+import { useUsername } from "../../Context/UsernameProvider";
 
 interface ModalCloser {
   closeModal: Function;

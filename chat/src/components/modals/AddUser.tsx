@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
-import { useChatSocket } from "../Context/ChatSocketProvider";
-import { useAddUser, useCurrentGroup } from "../Context/GroupProvider";
+import { useChatSocket } from "../../Context/ChatSocketProvider";
+import { useAddUser, useCurrentGroup } from "../../Context/GroupProvider";
 
 const AddUserModal = () => {
   const currentGroup = useCurrentGroup();

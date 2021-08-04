@@ -16,11 +16,11 @@ export class ChatGateway {
   server: ServerIO;
 
   constructor(private readonly chatService: ChatService) {}
-
   handleConnection(client: Socket) {
     const username = client.handshake.query.username;
     if (Array.isArray(username)) return;
-    this.chatService.addUser(username); //check if exist
+    if (!this.chatService.checkIfUserExists(username))
+      this.chatService.addUser(username);
     client.join(username);
     console.log(username + ' is logged in');
   }

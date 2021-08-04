@@ -55,8 +55,7 @@ export default class ChatDB {
       if (!group.isDM || group.members.length !== sortedMembers.length)
         continue;
       const sortedMembersOfGroup = group.members.concat().sort();
-      if (this.isMembersEqual(sortedMembers, sortedMembersOfGroup))
-        return true;
+      if (this.isMembersEqual(sortedMembers, sortedMembersOfGroup)) return true;
     }
     return false;
   }
@@ -69,7 +68,7 @@ export default class ChatDB {
     return true;
   }
 
-  private checkIfUserExists = (name: string) => {
+  checkIfUserExists = (name: string) => {
     let found = false;
     for (let i = 0; i < this.allUsers.length; i++) {
       if (this.allUsers[i].username == name) {

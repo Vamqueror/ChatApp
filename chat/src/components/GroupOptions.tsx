@@ -13,7 +13,7 @@ const GroupOptions: FC<groupOptionsProps> = (props) => {
   const removeUser = useRemoveUser();
   const username=useUsername()
 
-  if (currentGroup == null) return <> </>;
+  if (currentGroup == null||currentGroup.isDM) return <> </>;
   else
     return (<>
     <Button className='mt-3' variant="success" onClick={()=>props.setAddUserModal(true)}>Add User To Group</Button>

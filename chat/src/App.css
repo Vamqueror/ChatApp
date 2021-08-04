@@ -2,15 +2,23 @@
   text-align: center;
 }
 
-html,body {
+html,
+body {
   background: url("./styleImages/html.png");
   background-size: cover;
-  height:100%;
+  height: 100%;
+}
+
+.usernameLbl {
+  font-size: 24px;
+  margin-left: 10px;
+  margin-top: 10px;
+  color: white;
 }
 .chatApp {
   /* background-image: url("./styleImages/chatContainer.jpg");
   background-size: cover; */
-  background-color: #CF9FFF;
+  background-color: #cf9fff;
   display: flex;
   position: fixed;
   width: 85%;
@@ -24,12 +32,12 @@ html,body {
   border-radius: 5px;
 }
 
-.chatLog{
+.chatLog {
   background-color: #c082fd;
   border-radius: 10px;
   display: flex;
   position: fixed;
-  left:10%;
+  left: 10%;
   height: 95%;
   margin-left: 5px;
   margin-right: 20px;

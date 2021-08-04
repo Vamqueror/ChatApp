@@ -56,6 +56,7 @@ const Chat = () => {
             <Button variant="danger" onClick={disconnectClick}>
               Disconnect
             </Button>
+            <label className="usernameLbl">{`Hello ${location.state.Username}!`}</label>
             <div className="chatApp">
               <div className="flex-column d-flex">
                 <GroupList />

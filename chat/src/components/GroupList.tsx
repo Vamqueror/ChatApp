@@ -2,10 +2,13 @@ import "../App.css";
 import { ListGroup, ListGroupItem,OverlayTrigger,Popover } from "react-bootstrap";
 import { useGroup, useCurrentGroupUpdate } from "../Context/GroupProvider";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useUsername } from "../Context/UsernameProvider";
+import { groupName } from "../utils/groupListFunctions";
 
 const GroupList = () => {
   const groups = useGroup();
   const setCurrentGroup = useCurrentGroupUpdate();
+  const username=useUsername();
 
   const renderGroups = (): JSX.Element[] => {
     return groups.map((element, index) => {
@@ -22,7 +25,7 @@ const GroupList = () => {
         </Popover>
       }
     ><ListGroupItem action variant="secondary" key={index} eventKey={element.id}>
-          {element.name}
+          {groupName(element,username)}
         </ListGroupItem>
     </OverlayTrigger>
       );

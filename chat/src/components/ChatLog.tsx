@@ -23,6 +23,7 @@ const ChatLog = () => {
       messageText = input.current;
     sendMessage(new Message(user, messageText));
     formRef?.current?.reset();
+    input.current = "";
   };
 
   const chatform = currentGroup ? (

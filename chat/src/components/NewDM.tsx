@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Alert } from "react-bootstrap";
 import { useChatSocket } from "../Context/ChatSocketProvider";
 import { useAddGroup } from "../Context/GroupProvider";
 import { useUsername } from "../Context/UsernameProvider";
@@ -11,8 +11,8 @@ const NewDMModal: FC<ModalCloser> = (props) => {
   const membersRef = useRef("");
   const addGroup = useAddGroup();
   const username = useUsername();
-  const [error,setError]=useState("")
-  const socket=useChatSocket();
+  const [error, setError] = useState("");
+  const socket = useChatSocket();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,18 +21,37 @@ const NewDMModal: FC<ModalCloser> = (props) => {
       createGroup();
     }
   };
+  const isError = () => {
+    if (error !== "") return true;
+    return false;
+  };
 
   const handleChangeMembers = (event: any) => {
     membersRef.current = event.target.value;
   };
   const createGroup = () => {
-    addGroup(`${username}-${membersRef.current}`, membersRef.current + "," + username,true);
+    addGroup(
+      `${username}-${membersRef.current}`,
+      membersRef.current + "," + username,
+      true
+    );
   };
 
-  useEffect(()=>{
-    socket?. addInvalidDMSocketEvent(setError);
-    return ()=>socket?.off('invalid-user')
-  },[socket])
+  const ErrorAlert = () => {
+    return (
+      <Alert
+        variant="danger"
+        show={isError()}
+      >
+        {error}
+      </Alert>
+    );
+  };
+
+  useEffect(() => {
+    socket?.addInvalidDMSocketEvent(setError);
+    return () => socket?.off("invalid-user");
+  }, [socket]);
 
   return (
     <>
@@ -49,9 +68,9 @@ const NewDMModal: FC<ModalCloser> = (props) => {
           </Form.Group>
           <br />
           <Button type="submit">Create</Button>
-          <Form.Label>{error}</Form.Label>
         </Form>
       </Modal.Body>
+      <ErrorAlert />
     </>
   );
 };

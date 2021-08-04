@@ -14,6 +14,7 @@ import AddUserModal from "../components/modals/AddUser";
 import { UsernameProvider } from "../Context/UsernameProvider";
 import NewDMModal from "../components/modals/NewDM";
 const Chat = () => {
+  const [errorMessage,setErrorMessage]=useState('')
   const [newGroupModal, setNewGroupModal] = useState(false);
   const [removeUserModal, setRemoveUserModal] = useState(false);
   const [addUserModal, setAddUserModal] = useState(false);
@@ -51,7 +52,7 @@ const Chat = () => {
   return (
     <UsernameProvider username={location.state.Username}>
       <ChatSocketProvider>
-        <GroupProvider>
+        <GroupProvider errorSetter={setErrorMessage}>
           <div>
             <Button variant="danger" onClick={disconnectClick}>
               Disconnect
@@ -107,6 +108,7 @@ const Chat = () => {
               <RemoveUserModal />
             </Modal>
           </div>
+          <p className="errorLbl">{errorMessage}</p>
         </GroupProvider>
       </ChatSocketProvider>
     </UsernameProvider>

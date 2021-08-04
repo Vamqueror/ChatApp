@@ -45,7 +45,7 @@ export function useRemoveUser() {
   return useContext(RemoveUserContext);
 }
 
-export const GroupProvider: FC<{ children: any }> = (props) => {
+export const GroupProvider: FC<{ errorSetter:React.Dispatch<React.SetStateAction<string>>,children: any }> = (props) => {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const socket = useChatSocket();
@@ -84,7 +84,10 @@ export const GroupProvider: FC<{ children: any }> = (props) => {
     fetchUserData(username).then((data) => {
       let fetchedGroups = restrictAllGroups(username, data.groups);
       setMyGroups(fetchedGroups);
-    });
+    })
+    .catch((e)=>{
+      props.errorSetter("We were unable to fetch your data from the server, please try again later 😔")
+    })
   }, [socket]);
 
   useEffect(() => {

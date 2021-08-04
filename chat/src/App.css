@@ -15,6 +15,11 @@ body {
   margin-top: 10px;
   color: white;
 }
+
+.errorLbl{
+  color: white;
+font-size: 20px;
+}
 .chatApp {
   /* background-image: url("./styleImages/chatContainer.jpg");
   background-size: cover; */

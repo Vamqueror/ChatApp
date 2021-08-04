@@ -42,7 +42,7 @@ const Chat = () => {
     setNewDMModal(false);
   };
 
-  const disconnectClick = (e: any) => {
+  const disconnectClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
     location.state.Username = "";
     navigate.push("/Login");
@@ -67,7 +67,13 @@ const Chat = () => {
                   <Button onClick={() => setNewGroupModal(true)}>
                     Create New Group
                   </Button>
-                  <Button variant="info" className='mt-3' onClick={()=>{setNewDMModal(true)}}>
+                  <Button
+                    variant="info"
+                    className="mt-3"
+                    onClick={() => {
+                      setNewDMModal(true);
+                    }}
+                  >
                     Create New DM
                   </Button>
                   <GroupOptions
@@ -79,7 +85,10 @@ const Chat = () => {
             </div>
           </div>
           <div>
-            <Modal show={newGroupModal} onHide={closeNewGroupModal}>
+            <Modal
+              show={newGroupModal}
+              onHide={closeNewGroupModal}
+            >
               <NewGroupModal closeModal={closeNewGroupModal} />
             </Modal>
           </div>

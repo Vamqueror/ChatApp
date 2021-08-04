@@ -1,13 +1,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "../App.css";
-import { Button } from "react-bootstrap";
+import { Button,Form } from "react-bootstrap";
 
 function Login() {
   const input = useRef("");
   let navigate = useHistory();
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: any) => {
     input.current = event.target.value;
   };
 
@@ -18,16 +18,16 @@ function Login() {
 
   return (
     <div className="login">
-      <form>
-        <input
+      <Form onSubmit={e=>loginClick(e)}>
+        <Form.Control
+        style={{fontSize:"32px"}}
           type="text"
           onChange={(e) => handleChange(e)}
           placeholder="Enter Username"
-        ></input>{" "}
+        ></Form.Control>
         <br />
-        <br />
-        <Button onClick={loginClick}>Login</Button>
-      </form>
+        <Button style={{fontSize:"25px"}} type="submit">Login</Button>
+      </Form>
     </div>
   );
 }

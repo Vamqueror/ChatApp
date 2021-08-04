@@ -59,7 +59,7 @@ const NewDMModal: FC<ModalCloser> = (props) => {
       <Modal.Body>
         <Form onSubmit={(e) => handleSubmit(e)}>
           <Form.Group>
-            <Form.Label>Member name</Form.Label>
+            <Form.Label>Member</Form.Label>
             <Form.Control
               type="text"
               onChange={(e) => handleChangeMembers(e)}

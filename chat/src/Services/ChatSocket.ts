@@ -67,17 +67,21 @@ class ChatSocket {
     this.socket.on("remove-user", rmUser);
   }
 
-  addInvalidUserSocketEvent(setter: any) {
+  addInvalidUserSocketEvent(
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) {
     this.socket.on("invalid-user", () => {
       setter("Invalid User");
     });
   }
 
-  addInvalidDMSocketEvent(setter:any){
-    const displayError=(data:{errorMsg:string})=>{
-      setter(data.errorMsg)
-    }
-    this.socket.on("invalid-dm",displayError)
+  addInvalidDMSocketEvent(
+    setter: React.Dispatch<React.SetStateAction<string>>
+  ) {
+    const displayError = (data: { errorMsg: string }) => {
+      setter(data.errorMsg);
+    };
+    this.socket.on("invalid-dm", displayError);
   }
 
   addAddUserSocketEvent(

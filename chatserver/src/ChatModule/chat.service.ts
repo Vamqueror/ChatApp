@@ -15,6 +15,13 @@ export class ChatService {
   addGroup(name: string, members: string[],isDM:boolean) {
     return ChatManager.addGroup(name, members,isDM);
   }
+  existingMembers(members:string[]){
+    return ChatManager.existingMembers(members)
+  }
+
+  checkIfDMExists(members:string[]){
+    return ChatManager.checkIfDMExists(members)
+  }
   currentMembers(groupid: string) {
     return [...ChatManager.getGroup(groupid).members];
   }

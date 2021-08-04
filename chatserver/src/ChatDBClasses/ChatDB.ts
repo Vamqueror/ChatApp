@@ -17,14 +17,15 @@ export default class ChatDB {
   getGroup(id: string) {
     return this.findGroupById(id);
   }
-  addGroup(name: string, members: string[],isDM:boolean): Group {
-    let existingMembers = members.filter((member) =>
-      this.checkIfUserExists(member),
-    );
-    let group = new Group(uuidv4(), name, existingMembers,isDM);
+  addGroup(name: string, members: string[], isDM: boolean): Group {
+    let group = new Group(uuidv4(), name, members, isDM);
     this.allGroups.push(group);
     this.addGroupToUsers(group);
     return group;
+  }
+
+  existingMembers(members: string[]) {
+    return members.filter((member) => this.checkIfUserExists(member));
   }
 
   addUser(name: string) {
@@ -37,7 +38,7 @@ export default class ChatDB {
   }
 
   addUserToGroup(groupId: string, username: string) {
-    if (!this.isValid(groupId,username)) return false;
+    if (!this.isValid(groupId, username)) return false;
     this.addToGroups(groupId, username);
     this.addToUsers(groupId, username);
     return true;
@@ -48,28 +49,50 @@ export default class ChatDB {
     this.removeFromUsers(groupId, username);
   }
 
-  private checkIfUserExists=(name:string)=>{
-    let found = false;
-    for(let i = 0; i < this.allUsers.length; i++) {
-        if (this.allUsers[i].username == name) {
-            found = true;
-            break;
-        }
+  checkIfDMExists(members: string[]) {
+    const sortedMembers = members.concat().sort();
+    for (const group of this.allGroups) {
+      if (!group.isDM || group.members.length !== sortedMembers.length)
+        continue;
+      const sortedMembersOfGroup = group.members.concat().sort();
+      if (this.isMembersEqual(sortedMembers, sortedMembersOfGroup))
+        return true;
     }
-    return found
-}
+    return false;
+  }
 
-  private isValid(groupId: string, username: string){
+  private isMembersEqual(members1: string[], members2: string[]) {
+    for (let i = 0; i < members1.length; i++)
+      if (members1[i] !== members2[i]) {
+        return false;
+      }
+    return true;
+  }
+
+  private checkIfUserExists = (name: string) => {
+    let found = false;
+    for (let i = 0; i < this.allUsers.length; i++) {
+      if (this.allUsers[i].username == name) {
+        found = true;
+        break;
+      }
+    }
+    return found;
+  };
+
+  private isValid(groupId: string, username: string) {
     if (this.findUserByName(username) === undefined) return false;
-    let group=this.findGroupById(groupId)
-    if(this.findUserInGroup(username,group)!==undefined) return false
-    return true
+    let group = this.findGroupById(groupId);
+    if (this.findUserInGroup(username, group) !== undefined) return false;
+    return true;
   }
 
   private addToGroups(groupId: string, username: string) {
     let objectToChange = this.findGroupById(groupId);
     if (objectToChange === undefined) return;
-    objectToChange.msgLog.push(new Message(username,"~ Group Broadcast: Hello!, I have joined",true))
+    objectToChange.msgLog.push(
+      new Message(username, '~ Group Broadcast: Hello!, I have joined', true),
+    );
     objectToChange.members.push(username);
   }
 
@@ -95,8 +118,8 @@ export default class ChatDB {
     if (removeIndex !== -1) objectToChange.groups.splice(removeIndex, 1);
   }
 
-  findUserInGroup(username:string,group:Group){
-    return group.members.find(member=>member===username)
+  findUserInGroup(username: string, group: Group) {
+    return group.members.find((member) => member === username);
   }
 
   private findGroupById = (id: string) => {

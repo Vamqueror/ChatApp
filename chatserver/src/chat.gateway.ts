@@ -47,13 +47,17 @@ export class ChatGateway {
     let name = data.name,
       members = data.members,
       isDM = data.isDM;
-    let newGroup = this.chatService.addGroup(name, members, isDM);
-    if (newGroup.isDM && newGroup.members.length === 1)
+    members = this.chatService.existingMembers(members);
+    if (isDM && members.length === 1) {
       client.emit('invalid-dm', { errorMsg: 'Invalid User' });
-    else
+    } else if (isDM && this.chatService.checkIfDMExists(members)) {
+      client.emit('invalid-dm', { errorMsg: 'DM already exists' });
+    } else {
+      let newGroup = this.chatService.addGroup(name, members, isDM);
       newGroup.members.forEach((member) => {
         this.server.to(member).emit('group-add', { Group: newGroup });
       });
+    }
   }
 
   @SubscribeMessage('add-user')

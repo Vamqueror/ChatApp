@@ -2,7 +2,7 @@ import { useRef } from "react";
 import "../../App.css"
 import MessageBox from "./MessageBox";
 import Message from "../../classes/Message";
-import { Button, Form, Row } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useCurrentGroup, useSendMessage } from "../../Context/GroupProvider";
 import { useUsername } from "../../Context/UsernameProvider";
 

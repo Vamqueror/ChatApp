@@ -1,4 +1,4 @@
-import { Modal, Button, ButtonGroup, CloseButton } from "react-bootstrap";
+import { Modal, Button, ButtonGroup } from "react-bootstrap";
 import {
   useCurrentGroup,
   useGroup,

@@ -14,7 +14,8 @@ import AddUserModal from "../components/modals/AddUser";
 import { UsernameProvider } from "../Context/UsernameProvider";
 import NewDMModal from "../components/modals/NewDM";
 const Chat = () => {
-  const [errorMessage,setErrorMessage]=useState('')
+  const [errorMessageSocket,setErrorMessageSocket]=useState('')
+  const [errorMessageServer,setErrorMessageServer]=useState('')
   const [newGroupModal, setNewGroupModal] = useState(false);
   const [removeUserModal, setRemoveUserModal] = useState(false);
   const [addUserModal, setAddUserModal] = useState(false);
@@ -51,8 +52,8 @@ const Chat = () => {
 
   return (
     <UsernameProvider username={location.state.Username}>
-      <ChatSocketProvider>
-        <GroupProvider errorSetter={setErrorMessage}>
+      <ChatSocketProvider errorSetter={setErrorMessageSocket}>
+        <GroupProvider errorSetter={setErrorMessageServer}>
           <div>
             <Button variant="danger" onClick={disconnectClick}>
               Disconnect
@@ -108,7 +109,10 @@ const Chat = () => {
               <RemoveUserModal />
             </Modal>
           </div>
-          <p className="errorLbl">{errorMessage}</p>
+          <div className="setFlex">
+          <p className="errorLbl">{errorMessageServer}</p>
+          <p className="errorLbl">{errorMessageSocket && `+ ${errorMessageSocket}`}</p>
+          </div>
         </GroupProvider>
       </ChatSocketProvider>
     </UsernameProvider>

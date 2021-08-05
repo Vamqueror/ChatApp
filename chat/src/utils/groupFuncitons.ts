@@ -2,6 +2,7 @@ import Group from "../classes/Group";
 import Message from "../classes/Message";
 
 export const restrictAllGroups = (username: string, groups: Group[]) => {
+  if (groups === [] || !groups) return [];
   groups.forEach((group) => (group = restrictHistory(username, group)));
   return groups;
 };

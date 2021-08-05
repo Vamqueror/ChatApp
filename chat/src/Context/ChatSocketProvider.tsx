@@ -7,9 +7,10 @@ const SocketContext = createContext<ChatSocket | undefined>(undefined);
 export function useChatSocket() {
   return useContext(SocketContext);
 }
-export const ChatSocketProvider: FC<{ children: any }> = (
-  props
-) => {
+export const ChatSocketProvider: FC<{
+  errorSetter: React.Dispatch<React.SetStateAction<string>>;
+  children: any;
+}> = (props) => {
   const [socket, setSocket] = useState<ChatSocket>();
   const username = useUsername();
 
@@ -21,6 +22,11 @@ export const ChatSocketProvider: FC<{ children: any }> = (
       clientSocket.disconnect();
     };
   }, [username]);
+
+  useEffect(() => {
+    socket?.addConnectionErrorSocketEvent(props.errorSetter);
+    return () => socket?.off("connect_error");
+  });
 
   return (
     <SocketContext.Provider value={socket}>

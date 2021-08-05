@@ -86,7 +86,7 @@ export const GroupProvider: FC<{ errorSetter:React.Dispatch<React.SetStateAction
       setMyGroups(fetchedGroups);
     })
     .catch((e)=>{
-      props.errorSetter("We were unable to fetch your data from the server, please try again later 😔")
+      props.errorSetter("We were unable to fetch your data from the server, please reconnect or try again later 😢")
     })
   }, [socket]);
 

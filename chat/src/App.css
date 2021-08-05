@@ -16,9 +16,9 @@ body {
   color: white;
 }
 
-.errorLbl{
+.errorLbl {
   color: white;
-font-size: 20px;
+  font-size: 20px;
 }
 .chatApp {
   /* background-image: url("./styleImages/chatContainer.jpg");
@@ -37,6 +37,12 @@ font-size: 20px;
   border-radius: 5px;
 }
 
+.validation {
+  text-align: center;
+  font-size: 30px;
+  color: black;
+}
+
 .chatLog {
   background-color: #c082fd;
   border-radius: 10px;
@@ -48,6 +54,10 @@ font-size: 20px;
   margin-right: 20px;
   padding: 10px;
   padding-right: 50px;
+}
+.setFlex {
+  display: flex;
+  position: fixed;
 }
 
 .chat {

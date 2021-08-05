@@ -23,6 +23,12 @@ class ChatSocket {
     this.socket.disconnect();
   }
 
+  addConnectionErrorSocketEvent(setter:React.Dispatch<React.SetStateAction<string>>){
+    this.socket.on("connect_error",(err)=>{
+      setter("Unable to connect to server")
+    })
+  }
+
   addGroupSocketEvent(
     username: string,
     setMyGroups: React.Dispatch<React.SetStateAction<Group[]>>

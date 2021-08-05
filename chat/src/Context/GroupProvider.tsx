@@ -45,7 +45,10 @@ export function useRemoveUser() {
   return useContext(RemoveUserContext);
 }
 
-export const GroupProvider: FC<{ errorSetter:React.Dispatch<React.SetStateAction<string>>,children: any }> = (props) => {
+export const GroupProvider: FC<{
+  errorSetter: React.Dispatch<React.SetStateAction<string>>;
+  children: any;
+}> = (props) => {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
   const socket = useChatSocket();
@@ -58,9 +61,8 @@ export const GroupProvider: FC<{ errorSetter:React.Dispatch<React.SetStateAction
   };
 
   const handleGroupChange = (id: string) => {
-    let objToChange;
-    if ((objToChange = myGroups.find((obj) => obj.id == id)))
-      setCurrentGroup(objToChange);
+    let objToChange = myGroups.find((obj) => obj.id === id);
+    if (objToChange) setCurrentGroup(objToChange);
   };
 
   const addUser = (name: string, groupid: string) => {
@@ -81,13 +83,16 @@ export const GroupProvider: FC<{ errorSetter:React.Dispatch<React.SetStateAction
   };
 
   useEffect(() => {
-    fetchUserData(username).then((data) => {
-      let fetchedGroups = restrictAllGroups(username, data.groups);
-      setMyGroups(fetchedGroups);
-    })
-    .catch((e)=>{
-      props.errorSetter("We were unable to fetch your data from the server, please reconnect or try again later 😢")
-    })
+    fetchUserData(username)
+      .then((data) => {
+        let fetchedGroups = restrictAllGroups(username, data.groups);
+        setMyGroups(fetchedGroups);
+      })
+      .catch((e) => {
+        props.errorSetter(
+          "We were unable to fetch your data from the server, please reconnect or try again later 😢"
+        );
+      });
   }, [socket]);
 
   useEffect(() => {

@@ -90,7 +90,7 @@ export default class ChatDB {
     let objectToChange = this.findGroupById(groupId);
     if (objectToChange === undefined) return;
     objectToChange.msgLog.push(
-      new Message(username, '~ Group Broadcast: Hello!, I have joined', true),
+      new Message(username, 'Hello!, I have joined the group', true),
     );
     objectToChange.members.push(username);
   }

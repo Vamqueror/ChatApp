@@ -10,12 +10,12 @@ export function useChatSocket() {
 export const ChatSocketProvider: FC<{
   errorSetter: React.Dispatch<React.SetStateAction<string>>;
   children: any;
-}> = (props) => {
+}> = (props) => { 
   const [socket, setSocket] = useState<ChatSocket>();
   const username = useUsername();
 
   useEffect(() => {
-    if (!username || username == "") return;
+    if (!username || username === "") return;
     const clientSocket = new ChatSocket(username);
     setSocket(clientSocket);
     return () => {

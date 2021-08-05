@@ -43,7 +43,11 @@ const RemoveUserModal = () => {
     <>
       <Modal.Header closeButton>Remove User</Modal.Header>
       <Modal.Body>
-        <ButtonGroup vertical>{mappedMembersComponent()}</ButtonGroup>
+        {currentGroup?.members.length === 1 ? (
+          <p>You are the only group member left</p>
+        ) : (
+          <ButtonGroup vertical>{mappedMembersComponent()}</ButtonGroup>
+        )}
       </Modal.Body>
     </>
   );

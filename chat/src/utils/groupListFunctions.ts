@@ -8,7 +8,7 @@ export const groupName = (group: Group, username: string) => {
 const dmName = (group: Group, username: string) => {
   let name = group.name.concat().split("-");
   for (let str of name) {
-    if (str != username) return str;
+    if (str !== username) return str;
   }
   return group.name;
 };

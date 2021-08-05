@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useEffect, useState } from "react";
+import { createContext, FC, useContext, useState } from "react";
 
 const UsernameContext = createContext<string>("");
 const SetUsernameContext = createContext<Function>(() => {});

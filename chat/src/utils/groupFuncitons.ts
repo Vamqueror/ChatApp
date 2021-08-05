@@ -51,7 +51,7 @@ export const removeUserFromGroup = (
   let objectToChange = findGroupById(groups, groupid);
   if (objectToChange) {
     let indexToRemove = objectToChange.members.indexOf(username);
-    if (indexToRemove != -1) objectToChange.members.splice(indexToRemove, 1);
+    if (indexToRemove !== -1) objectToChange.members.splice(indexToRemove, 1);
   }
   return groups;
 };
@@ -64,7 +64,7 @@ export const leaveGroup = (
   let objectToRemove = findGroupById(groups, groupid);
   if (objectToRemove) {
     let indexToRemove = groups.indexOf(objectToRemove);
-    if (indexToRemove != -1) groups.splice(indexToRemove, 1);
+    if (indexToRemove !== -1) groups.splice(indexToRemove, 1);
   }
   return groups;
 };
